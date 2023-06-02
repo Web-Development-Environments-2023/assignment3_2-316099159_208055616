@@ -30,7 +30,8 @@ router.post('/favorites', async (req,res,next) => {
     const recipe_id = req.body.recipeId;
     await user_utils.markAsFavorite(user_id, recipe_id);
     res.status(200).send("The Recipe successfully saved as favorite");
-    } catch(error){
+  } catch(error){
+    res.status(409).send(error)
     next(error);
   }
 })
@@ -61,6 +62,7 @@ router.post('/lastWatched', async (req, res, next) => {
     await user_utils.addToLastWatched(user_id, recipe_id);
     res.status(200).send("The Recipe successfully added to last watched");
   } catch (error) {
+    res.status(409).send(error)
     next(error);
   }
 });
@@ -91,6 +93,7 @@ router.post('/myRecipes', async (req, res, next) => {
     await user_utils.addToMyRecepies(user_id, recipe_id);
     res.status(200).send("The Recipe successfully added to my recipes");
   } catch (error) {
+    res.status(409).send(error)
     next(error);
   }
 });

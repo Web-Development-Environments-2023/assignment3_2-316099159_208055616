@@ -107,6 +107,8 @@ paths:
           description: The Recipe successfully saved as favorite
         "401":
           description: user is not authorized
+        "409":
+          description: Asset already in DB
       security:
         - cookieAuth: []
   /users/lastWatched:
@@ -148,6 +150,8 @@ paths:
           description: The recipe was successfully added to the last watched list
         "401":
           description: User is not authorized
+        "409":
+          description: Asset already in DB
       security:
         - cookieAuth: []
   /users/myRecipes:
@@ -189,6 +193,8 @@ paths:
           description: The recipe was successfully added to the user's recipe list
         "401":
           description: User is not authorized
+        "409":
+          description: Asset already in DB
       security:
         - cookieAuth: []
   /users/searchLimit:

@@ -19,6 +19,9 @@ async function getFavoriteRecipes(user_id){
  // updates array of favorites recipes that were saved by the logged-in user
 async function markAsFavorite(user_id, recipe_id){
     const recepiesData = await getUserRecepiesData(user_id);
+    if (recepiesData.favorites.includes(recipe_id)) {
+        throw Error(`${recipe_id} already in ${user_id} favorites`)
+    }
     recepiesData.favorites.push(recipe_id);
     await DButils.execQuery(`UPDATE users SET recepiesData='${JSON.stringify(recepiesData)}' WHERE user_id='${user_id}'`);
 }
@@ -33,6 +36,9 @@ async function getLastWatched(user_id) {
 // updates sorted by time array of last watched recipes that were saved by the logged-in user
 async function addToLastWatched(user_id, recipe_id) {
     const recepiesData = await getUserRecepiesData(user_id);
+    if (recepiesData.favorites.includes(recipe_id)) {
+        throw Error(`${recipe_id} already in ${user_id} lastWatched`)
+    }
     recepiesData.lastWatched.push(recipe_id);
     await DButils.execQuery(`UPDATE users SET recepiesData='${JSON.stringify(recepiesData)}' WHERE user_id='${user_id}'`);
 }
@@ -47,6 +53,9 @@ async function getMyRecepies(user_id) {
 // updates array of users recepies recipes that were saved by the logged-in user
 async function addToMyRecepies(user_id, recipe_id) {
     const recepiesData = await getUserRecepiesData(user_id);
+    if (recepiesData.favorites.includes(recipe_id)) {
+        throw Error(`${recipe_id} already in ${user_id} myRecepies`)
+    }
     recepiesData.myRecepies.push(recipe_id);
     await DButils.execQuery(`UPDATE users SET recepiesData='${JSON.stringify(recepiesData)}' WHERE user_id='${user_id}'`);
 }
