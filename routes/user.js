@@ -14,9 +14,8 @@ router.use(async function (req, res, next) {
         req.user_id = req.session.user_id;
         next();
       }
-      else{
-        throw Error("Server Error")
-      }
+      else
+        throw { status: 401, message: "Unauthorized" };
     }).catch(err => next(err));
   } else {
     res.sendStatus(401);
@@ -34,7 +33,6 @@ router.put('/favorites', async (req,res,next) => {
     await user_utils.markAsFavorite(user_id, recipe_id);
     res.status(200).send("The Recipe successfully saved as favorite");
   } catch(error){
-    res.status(409).send(error)
     next(error);
   }
 })
@@ -65,7 +63,6 @@ router.put('/lastWatched', async (req, res, next) => {
     await user_utils.addToLastWatched(user_id, recipe_id);
     res.status(200).send("The Recipe successfully added to last watched");
   } catch (error) {
-    res.status(409).send(error)
     next(error);
   }
 });
@@ -96,7 +93,6 @@ router.put('/myRecipes', async (req, res, next) => {
     await user_utils.addToMyRecipes(user_id, recipe_id);
     res.status(200).send("The Recipe successfully added to my recipes");
   } catch (error) {
-    res.status(409).send(error)
     next(error);
   }
 });

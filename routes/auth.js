@@ -1,6 +1,5 @@
 var express = require("express");
 var router = express.Router();
-const MySql = require("../routes/utils/MySql");
 const DButils = require("../routes/utils/DButils");
 const bcrypt = require("bcrypt");
 
@@ -55,6 +54,10 @@ router.post("/Register", async (req, res, next) => {
 
 router.post("/Login", async (req, res, next) => {
   try {
+    // check if already logged in
+    if (req.body.username === req.session.user_id)
+      throw { status: 403, message: `Username "${req.body.username}" already connected` };
+
     // check that username exists
     const users = await DButils.execQuery("SELECT username FROM users");
     if (!users.find((x) => x.username === req.body.username))
@@ -75,14 +78,15 @@ router.post("/Login", async (req, res, next) => {
     req.session.user_id = user.userName
 
     // return cookie
-    res
-    .status(200).send({ message: "login succeeded", success: true });
+    res.status(200).send({ message: "login succeeded", success: true });
   } catch (error) {
     next(error);
   }
 });
 
 router.post("/Logout", function (req, res) {
+  if (req.session.user_id === undefined)
+    throw { status: 403, message: "cannot logout with no connected session" };
   req.session.reset(); // reset the session info --> send cookie when  req.session == undefined!!
   res.send({ success: true, message: "logout succeeded" });
 });

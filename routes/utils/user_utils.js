@@ -23,7 +23,7 @@ async function getFavoriteRecipes(user_id){
 async function markAsFavorite(user_id, recipe_id){
     const recipesData = await getUserRecipesData(user_id);
     if (recipesData.favorites.includes(recipe_id)) {
-        throw Error(`${recipe_id} already in ${user_id} favorites`)
+        throw { status: 409, message: `${recipe_id} already in ${user_id}'s favorites` };
     }
     recipesData.favorites.push(recipe_id);
     await DButils.execQuery(`UPDATE users SET recipesData='${JSON.stringify(recipesData)}' WHERE username='${user_id}'`);
@@ -41,7 +41,7 @@ async function getLastWatched(user_id) {
 async function addToLastWatched(user_id, recipe_id) {
     const recipesData = await getUserRecipesData(user_id);
     if (recipesData.lastWatched.includes(recipe_id)) {
-        throw Error(`${recipe_id} already in ${user_id} lastWatched`)
+        throw { status: 409, message: `already in ${user_id}'s lastWatched` };
     }
     recipesData.lastWatched.push(recipe_id);
     await DButils.execQuery(`UPDATE users SET recipesData='${JSON.stringify(recipesData)}' WHERE username='${user_id}'`);
@@ -59,7 +59,7 @@ async function getMyRecipes(user_id) {
 async function addToMyRecipes(user_id, recipe_id) {
     const recipesData = await getUserRecipesData(user_id);
     if (recipesData.myRecipes.includes(recipe_id)) {
-        throw Error(`${recipe_id} already in ${user_id} myRecipes`)
+        throw { status: 409, message: `${recipe_id} already in ${user_id}'s myRecipes` };
     }
     recipesData.myRecipes.push(recipe_id);
     await DButils.execQuery(`UPDATE users SET recipesData='${JSON.stringify(recipesData)}' WHERE username='${user_id}'`);
