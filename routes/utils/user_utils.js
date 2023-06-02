@@ -1,81 +1,88 @@
 const DButils = require("./DButils");
 
 /**
- * returns all object recepiesData of the logged-in user
- * recepiesData format -> {'lastWatched':[], 'favorites':[], 'myRecepies':[]}
+ * returns all object recipesData of the logged-in user
+ * recipesData format -> {'lastWatched':[], 'favorites':[], 'myRecipes':[]}
  */
-async function getUserRecepiesData(user_id){
-    const result = await DButils.execQuery(`SELECT recepiesData FROM users WHERE user_id='${user_id}'`);
-    return JSON.parse(result[0].recepiesData);
+async function getUserRecipesData(user_id){
+    const result = await DButils.execQuery(`SELECT recipesData FROM users WHERE username='${user_id}'`);
+    recipesData = result[0].recipesData
+    console.log(recipesData)
+    return recipesData
 }
 
 // returns array of favorites recipes that were saved by the logged-in user
 async function getFavoriteRecipes(user_id){
-    const recepiesData = await getUserRecepiesData(user_id);
-    const favoriteRecepies = recepiesData.favorites;
-    return favoriteRecepies;
+    const recipesData = await getUserRecipesData(user_id);
+    const favoriteRecipes = recipesData.favorites;
+    console.log(`favoriteRecipes = ${favoriteRecipes}`)
+    return favoriteRecipes;
 }
 
  // updates array of favorites recipes that were saved by the logged-in user
 async function markAsFavorite(user_id, recipe_id){
-    const recepiesData = await getUserRecepiesData(user_id);
-    if (recepiesData.favorites.includes(recipe_id)) {
+    const recipesData = await getUserRecipesData(user_id);
+    if (recipesData.favorites.includes(recipe_id)) {
         throw Error(`${recipe_id} already in ${user_id} favorites`)
     }
-    recepiesData.favorites.push(recipe_id);
-    await DButils.execQuery(`UPDATE users SET recepiesData='${JSON.stringify(recepiesData)}' WHERE user_id='${user_id}'`);
+    recipesData.favorites.push(recipe_id);
+    await DButils.execQuery(`UPDATE users SET recipesData='${JSON.stringify(recipesData)}' WHERE username='${user_id}'`);
 }
 
 // returns sorted by time array of last watched recipes that were saved by the logged-in user
 async function getLastWatched(user_id) {
-    const recepiesData = await getUserRecepiesData(user_id);
-    const lastWatched = recepiesData.lastWatched;
+    const recipesData = await getUserRecipesData(user_id);
+    const lastWatched = recipesData.lastWatched;
+    console.log(`lastWatched = ${lastWatched}`)
     return lastWatched;
 }
 
 // updates sorted by time array of last watched recipes that were saved by the logged-in user
 async function addToLastWatched(user_id, recipe_id) {
-    const recepiesData = await getUserRecepiesData(user_id);
-    if (recepiesData.favorites.includes(recipe_id)) {
+    const recipesData = await getUserRecipesData(user_id);
+    if (recipesData.lastWatched.includes(recipe_id)) {
         throw Error(`${recipe_id} already in ${user_id} lastWatched`)
     }
-    recepiesData.lastWatched.push(recipe_id);
-    await DButils.execQuery(`UPDATE users SET recepiesData='${JSON.stringify(recepiesData)}' WHERE user_id='${user_id}'`);
+    recipesData.lastWatched.push(recipe_id);
+    await DButils.execQuery(`UPDATE users SET recipesData='${JSON.stringify(recipesData)}' WHERE username='${user_id}'`);
 }
 
-// returns array of users recepies recipes that were saved by the logged-in user
-async function getMyRecepies(user_id) {
-  const recepiesData = await getUserRecepiesData(user_id);
-  const myRecepies = recepiesData.myRecepies;
-  return myRecepies;
+// returns array of users recipes recipes that were saved by the logged-in user
+async function getMyRecipes(user_id) {
+  const recipesData = await getUserRecipesData(user_id);
+  const myRecipes = recipesData.myRecipes;
+  console.log(`myRecipes = ${myRecipes}`)
+  return myRecipes;
 }
 
-// updates array of users recepies recipes that were saved by the logged-in user
-async function addToMyRecepies(user_id, recipe_id) {
-    const recepiesData = await getUserRecepiesData(user_id);
-    if (recepiesData.favorites.includes(recipe_id)) {
-        throw Error(`${recipe_id} already in ${user_id} myRecepies`)
+// updates array of users recipes recipes that were saved by the logged-in user
+async function addToMyRecipes(user_id, recipe_id) {
+    const recipesData = await getUserRecipesData(user_id);
+    if (recipesData.myRecipes.includes(recipe_id)) {
+        throw Error(`${recipe_id} already in ${user_id} myRecipes`)
     }
-    recepiesData.myRecepies.push(recipe_id);
-    await DButils.execQuery(`UPDATE users SET recepiesData='${JSON.stringify(recepiesData)}' WHERE user_id='${user_id}'`);
+    recipesData.myRecipes.push(recipe_id);
+    await DButils.execQuery(`UPDATE users SET recipesData='${JSON.stringify(recipesData)}' WHERE username='${user_id}'`);
 }
 
 // returns SerachLimit of logged-in user
 async function getSearchLimit(user_id) {
-    const result = await DButils.execQuery(`SELECT searchLimit FROM users WHERE user_id='${user_id}'`);
-    return result[0].searchLimit
+    const result = await DButils.execQuery(`SELECT searchLimit FROM users WHERE username='${user_id}'`);
+    const searchLimit = result[0].searchLimit
+    console.log(`searchLimit = ${searchLimit}`)
+    return searchLimit
 }
   
 // updates SerachLimit that were saved by the logged-in user
 async function updateSerachLimit(user_id, userSerachLimit) {
-    await DButils.execQuery(`UPDATE users SET searchLimit='${userSerachLimit}' WHERE user_id='${user_id}'`);
+    await DButils.execQuery(`UPDATE users SET searchLimit='${userSerachLimit}' WHERE username='${user_id}'`);
 }
 
 exports.getFavoriteRecipes = getFavoriteRecipes;
 exports.markAsFavorite = markAsFavorite;
 exports.getLastWatched = getLastWatched;
 exports.addToLastWatched = addToLastWatched;
-exports.getMyRecepies = getMyRecepies;
-exports.addToMyRecepies = addToMyRecepies;
+exports.getMyRecipes = getMyRecipes;
+exports.addToMyRecipes = addToMyRecipes;
 exports.getSearchLimit = getSearchLimit;
 exports.updateSerachLimit = updateSerachLimit;

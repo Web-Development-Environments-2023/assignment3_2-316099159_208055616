@@ -34,7 +34,7 @@ router.post("/Register", async (req, res, next) => {
 
     // create default consts to add to new user
     const searchLimit = 5
-    const recepiesData = {'lastWatched':[], 'favorites':[], 'myRecepies':[]}
+    const recipesData = {'lastWatched':[], 'favorites':[], 'myRecipes':[]}
 
     await DButils.execQuery(
       `INSERT INTO users VALUES 
@@ -45,7 +45,7 @@ router.post("/Register", async (req, res, next) => {
       '${hash_password}', 
       '${user_details.email}', 
       '${searchLimit}', 
-      '${JSON.stringify(recepiesData)}')`
+      '${JSON.stringify(recipesData)}')`
     );
     res.status(201).send({ message: "user created", success: true });
   } catch (error) {
@@ -72,11 +72,11 @@ router.post("/Login", async (req, res, next) => {
     }
 
     // Set cookie
-    req.session.user_id = user.user_id;
-
+    req.session.user_id = user.userName
 
     // return cookie
-    res.status(200).send({ message: "login succeeded", success: true });
+    res
+    .status(200).send({ message: "login succeeded", success: true });
   } catch (error) {
     next(error);
   }
