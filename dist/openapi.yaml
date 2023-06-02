@@ -4,23 +4,23 @@ info:
   description: API for recipes project
   version: 1.0.1
 servers:
-# local:
-- url: "http://127.0.0.1:3000"
-# remote:
-# - url: "http://132.72.65.211"
-  description: SwaggerHub API Auto Mocking hey
+  # local:
+  - url: "http://127.0.0.1:3000"
+    # remote:
+    # - url: "http://132.72.65.211"
+    description: SwaggerHub API Auto Mocking hey
 tags:
-- name: Auth
-  description: All authentication related routes
-- name: Users
-  description: All the user's personal app info
-- name: Recipes
-  description: All reciepes general info
+  - name: Auth
+    description: All authentication related routes
+  - name: Users
+    description: All the user's personal app info
+  - name: Recipes
+    description: All reciepes general info
 paths:
   /register:
     post:
       tags:
-      - Auth
+        - Auth
       summary: A new user from the client is added to the server
       description: A JSON object contains all the details about the new user.
       requestBody:
@@ -28,7 +28,7 @@ paths:
         content:
           application/json:
             schema:
-              $ref: '#/components/schemas/User'
+              $ref: "#/components/schemas/User"
         required: true
       responses:
         "201":
@@ -38,14 +38,14 @@ paths:
   /login:
     post:
       tags:
-      - Auth
+        - Auth
       summary: Login an exist user
       description: An exist user login to the system
       requestBody:
         content:
           application/json:
             schema:
-              $ref: '#/components/schemas/LoginScheme'
+              $ref: "#/components/schemas/LoginScheme"
         required: true
       responses:
         "200":
@@ -71,7 +71,7 @@ paths:
   /users/favorites:
     get:
       tags:
-      - Users
+        - Users
       summary: Return the favorite recipes that were saved by user
       description: Get an array of recipes that were saved by a specific user
       responses:
@@ -82,14 +82,14 @@ paths:
               schema:
                 type: array
                 items:
-                  $ref: '#/components/schemas/RecipePreview'
+                  $ref: "#/components/schemas/RecipePreview"
         "401":
           description: user is not authorized
       security:
-      - cookieAuth: []
-    post:
+        - cookieAuth: []
+    put:
       tags:
-      - Users
+        - Users
       summary: save recipe in the favorites list of a user
       description: save recipe in the favorites list of a user
       requestBody:
@@ -108,29 +108,151 @@ paths:
         "401":
           description: user is not authorized
       security:
-      - cookieAuth: []
+        - cookieAuth: []
+  /users/lastWatched:
+    get:
+      tags:
+        - Users
+      summary: Return the last watched recipes of a user
+      description: Get an array of recipes that were last watched by a specific user
+      responses:
+        "200":
+          description: Data about the user's last watched recipes returned
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: "#/components/schemas/RecipePreview"
+        "401":
+          description: User is not authorized
+      security:
+        - cookieAuth: []
+    put:
+      tags:
+        - Users
+      summary: Add a recipe to the last watched list of a user
+      description: Add a recipe to the last watched list of a user
+      requestBody:
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                recipeId:
+                  type: string
+                  description: Recipe's ID which the user wants to add to the last watched list
+                  example: 716429
+      responses:
+        "200":
+          description: The recipe was successfully added to the last watched list
+        "401":
+          description: User is not authorized
+      security:
+        - cookieAuth: []
+  /users/myRecipes:
+    get:
+      tags:
+        - Users
+      summary: Return the recipes added by a user
+      description: Get an array of recipes added by a specific user
+      responses:
+        "200":
+          description: Data about the user's recipes returned
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: "#/components/schemas/RecipePreview"
+        "401":
+          description: User is not authorized
+      security:
+        - cookieAuth: []
+    put:
+      tags:
+        - Users
+      summary: Add a recipe to the user's recipe list
+      description: Add a recipe to the recipe list of a user
+      requestBody:
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                recipeId:
+                  type: string
+                  description: Recipe's ID which the user wants to add to their recipe list
+                  example: 716429
+      responses:
+        "200":
+          description: The recipe was successfully added to the user's recipe list
+        "401":
+          description: User is not authorized
+      security:
+        - cookieAuth: []
+  /users/searchLimit:
+    get:
+      tags:
+        - Users
+      summary: Return the searchLimit of user
+      description: Get int of searchLimit for specific user
+      responses:
+        "200":
+          description: user's searchLimit returned
+          content:
+            application/json:
+              schema:
+                type: integer
+                example: 10
+        "401":
+          description: User is not authorized
+      security:
+        - cookieAuth: []
+    put:
+      tags:
+        - Users
+      summary: Set the searchLimit of user
+      description: Set searchLimit of a user
+      requestBody:
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                searchLimit:
+                  type: integer
+                  description: searchLimit of user to change setting
+                  example: 10
+      responses:
+        "200":
+          description: The searchLimit was changed successfully on the user's
+        "401":
+          description: User is not authorized
+      security:
+        - cookieAuth: []
   /recipes/{recipeId}:
     get:
       tags:
-      - Recipes
+        - Recipes
       summary: Return preview details on recipe by his ID
       description: Return preview details on recipe by his ID
       parameters:
-      - name: recipeId
-        in: path
-        description: recipe's id
-        required: true
-        style: simple
-        explode: false
-        schema:
-          type: integer
+        - name: recipeId
+          in: path
+          description: recipe's id
+          required: true
+          style: simple
+          explode: false
+          schema:
+            type: integer
       responses:
         "200":
           description: data about the recipe
           content:
             application/json:
               schema:
-                $ref: '#/components/schemas/RecipePreview'
+                $ref: "#/components/schemas/RecipePreview"
         "404":
           description: recipeId is not exists
 components:
@@ -160,7 +282,8 @@ components:
           maxLength: 10
           minLength: 5
           type: string
-          description: password conatins between 5 to 10 chars, at least one of them
+          description:
+            password conatins between 5 to 10 chars, at least one of them
             is a number and a special char
           format: password
           example: my_name@12
@@ -227,4 +350,3 @@ components:
           type: boolean
           description: indication if the recipe is gluten free
           example: false
-  

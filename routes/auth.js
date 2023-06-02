@@ -18,9 +18,11 @@ router.post("/Register", async (req, res, next) => {
       email: req.body.email,
       profilePic: req.body.profilePic
     }
+
     let users = [];
     users = await DButils.execQuery("SELECT username from users");
 
+    // validate username exists
     if (users.find((x) => x.username === user_details.username))
       throw { status: 409, message: "Username taken" };
 
@@ -29,9 +31,21 @@ router.post("/Register", async (req, res, next) => {
       user_details.password,
       parseInt(process.env.bcrypt_saltRounds)
     );
+
+    // create default consts to add to new user
+    const searchLimit = 5
+    const recepiesData = {'lastWatched':[], 'favorites':[], 'myRecepies':[]}
+
     await DButils.execQuery(
-      `INSERT INTO users VALUES ('${user_details.username}', '${user_details.firstname}', '${user_details.lastname}',
-      '${user_details.country}', '${hash_password}', '${user_details.email}')`
+      `INSERT INTO users VALUES 
+      ('${user_details.username}', 
+      '${user_details.firstname}', 
+      '${user_details.lastname}',
+      '${user_details.country}', 
+      '${hash_password}', 
+      '${user_details.email}', 
+      '${searchLimit}', 
+      '${JSON.stringify(recepiesData)}')`
     );
     res.status(201).send({ message: "user created", success: true });
   } catch (error) {

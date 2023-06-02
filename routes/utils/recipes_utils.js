@@ -38,8 +38,15 @@ async function getRecipeDetails(recipe_id) {
 }
 
 
+// TODO: NEED TO IMPLEMENT
+// param: list of recipe_ids
+// returns: object of recepies preview data 
+async function getRecipesPreview(recipe_ids) {
+    return null
+}
 
 exports.getRecipeDetails = getRecipeDetails;
+exports.getRecipesPreview = getRecipesPreview;
 
 
 
