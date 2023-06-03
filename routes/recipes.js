@@ -1,17 +1,17 @@
 var express = require("express");
 var router = express.Router();
 const recipes_utils = require("./utils/recipes_utils");
-const users_utils = require("./utils/users_utils");
+const user_utils = require("./utils/user_utils");
 
 /**
  * GET request to get x recipes by user's limit
- * @param {int} limit - the number of recipes to return
  * @returns {JSON} - x recipes
  * @example http://localhost:3000/recipes/3
  */
 router.get("/:limit", async (req, res, next) => {
   try {
-    const recipes = await recipes_utils.getRecipesByLimit(req.params.limit);
+    const limit = user_utils.getUserLimit(req.session.username);
+    const recipes = await recipes_utils.getRecipesByLimit(limit);
     res.status(200).send(recipes);
   } catch (error) {
     next(error);

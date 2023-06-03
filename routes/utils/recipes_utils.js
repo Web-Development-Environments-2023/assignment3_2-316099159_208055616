@@ -52,6 +52,8 @@ async function getRandomRecipes(){
     return result.data["recipes"];
 }
 
+
+
 function boolIntConverter(value)
 {
     if (value == true) {
