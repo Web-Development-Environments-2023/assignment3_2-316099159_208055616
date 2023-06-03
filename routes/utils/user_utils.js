@@ -67,10 +67,14 @@ async function addToMyRecipes(user_id, recipe_id) {
 
 // returns SerachLimit of logged-in user
 async function getSearchLimit(user_id) {
-    const result = await DButils.execQuery(`SELECT searchLimit FROM users WHERE username='${user_id}'`);
-    const searchLimit = result[0].searchLimit
-    console.log(`searchLimit = ${searchLimit}`)
-    return searchLimit
+    try{
+        const result = await DButils.execQuery(`SELECT searchLimit FROM users WHERE username='${user_id}'`);
+        const searchLimit = result[0].searchLimit
+        console.log(`searchLimit = ${searchLimit}`)
+        return searchLimit
+    }catch (error) {
+            return 5;
+        }
 }
   
 // updates SerachLimit that were saved by the logged-in user

@@ -6,12 +6,12 @@ const user_utils = require("./utils/user_utils");
 /**
  * GET request to get x recipes by user's limit
  * @returns {JSON} - x recipes
- * @example http://localhost:3000/recipes/3
+ * @example http://localhost:3000/recipes/search
  */
-router.get("/:limit", async (req, res, next) => {
+router.get("/search", async (req, res, next) => {
   try {
-    const limit = user_utils.getUserLimit(req.session.username);
-    const recipes = await recipes_utils.getRecipesByLimit(limit);
+    const limit = user_utils.getSearchLimit(req.session.username);
+    const recipes = await recipes_utils.searchByLimit(limit);
     res.status(200).send(recipes);
   } catch (error) {
     next(error);

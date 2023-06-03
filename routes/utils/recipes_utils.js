@@ -40,6 +40,10 @@ async function addNewRecipe(r) {
     return r;
 }
 
+async function searchByLimit(limit) {
+    return null;
+}
+
 async function getRandomRecipes(){
     let result = await axios.get(`${api_domain}/random`,
     {   
@@ -52,6 +56,10 @@ async function getRandomRecipes(){
     return result.data["recipes"];
 }
 
+async function searchByLimit(limit)
+{
+    
+}
 
 
 function boolIntConverter(value)
