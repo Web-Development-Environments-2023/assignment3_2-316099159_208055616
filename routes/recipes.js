@@ -1,17 +1,62 @@
 var express = require("express");
 var router = express.Router();
 const recipes_utils = require("./utils/recipes_utils");
-
-router.get("/", (req, res) => res.send("im here"));
-
+const users_utils = require("./utils/users_utils");
 
 /**
- * This path returns a full details of a recipe by its id
+ * GET request to get x recipes by user's limit
+ * @param {int} limit - the number of recipes to return
+ * @returns {JSON} - x recipes
+ * @example http://localhost:3000/recipes/3
+ */
+router.get("/:limit", async (req, res, next) => {
+  try {
+    const recipes = await recipes_utils.getRecipesByLimit(req.params.limit);
+    res.status(200).send(recipes);
+  } catch (error) {
+    next(error);
+  }
+});
+
+/**
+ * GET 3 random recipes
+ * @returns {JSON} - 3 random recipes
+ * @example http://localhost:3000/recipes/random
+ */
+router.get("/random", async (req, res, next) => {
+  try {
+    const random_recipes = await recipes_utils.getRandomRecipes();
+    res.status(200).send(random_recipes);
+  } catch (error) {
+    next(error);
+  }
+});
+
+/**
+ * GET request to get recipe details
+ * @param {int} recipeId - the id of the recipe
+ * @returns {JSON} - the recipe details
+ * @example http://localhost:3000/recipes/123/information
  */
 router.get("/:recipeId", async (req, res, next) => {
   try {
     const recipe = await recipes_utils.getRecipeDetails(req.params.recipeId);
-    res.send(recipe);
+    res.status(200).send(recipe);
+  } catch (error) {
+    next(error);
+  }
+});
+
+/**
+ * POST request to create a new recipe
+ * @param {JSON} recipe - the recipe to add
+ * @returns {JSON} - the recipe that was added
+ * @example http://localhost:3000/recipes/
+ */
+router.post("/", async (req, res, next) => {
+  try {
+    const recipe = await recipes_utils.addNewRecipe(req.body);
+    res.status(201).send(recipe);
   } catch (error) {
     next(error);
   }

@@ -45,7 +45,7 @@ router.get('/favorites', async (req,res,next) => {
   try{
     const user_id = req.session.user_id;
     const recipes_ids = await user_utils.getFavoriteRecipes(user_id);
-    const results = await recipe_utils.getRecipesPreview(recipes_ids);
+    const results = await recipe_utils.getRecipeDetails(recipes_ids);
     res.status(200).send(results);
   } catch(error){
     next(error); 
@@ -75,7 +75,7 @@ router.get('/lastWatched', async (req, res, next) => {
   try {
     const user_id = req.session.user_id;
     const lastWatched = await user_utils.getLastWatched(user_id);
-    const results = await recipe_utils.getRecipesPreview(lastWatched);
+    const results = await recipe_utils.getRecipeDetails(lastWatched);
     res.status(200).send(results);
   } catch (error) {
     next(error);
@@ -105,7 +105,7 @@ router.get('/myRecipes', async (req, res, next) => {
   try {
     const user_id = req.session.user_id;
     const myRecipes = await user_utils.getMyRecipes(user_id);
-    const results = await recipe_utils.getRecipesPreview(myRecipes);
+    const results = await recipe_utils.getRecipeDetails(myRecipes);
     res.status(200).send(results);
   } catch (error) {
     next(error);

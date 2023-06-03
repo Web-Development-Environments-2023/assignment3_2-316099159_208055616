@@ -237,12 +237,29 @@ paths:
           description: User is not authorized
       security:
         - cookieAuth: []
+  /recipes:
+    post:
+      tags:
+        - Recipes
+      requestBody:
+        description: add New Recepie
+        content:
+          application/json:
+            schema:
+              $ref: "#/components/schemas/Recipe"
+      responses:
+        "201":
+          description: Recipe added successfully
+        "401":
+          description: User is not authorized
+        "409":
+          description: Asset already in DB
   /recipes/{recipeId}:
     get:
       tags:
         - Recipes
-      summary: Return preview details on recipe by his ID
-      description: Return preview details on recipe by his ID
+      summary: Return details on recipe by his ID
+      description: Return details on recipe by his ID
       parameters:
         - name: recipeId
           in: path
@@ -258,9 +275,31 @@ paths:
           content:
             application/json:
               schema:
-                $ref: "#/components/schemas/RecipePreview"
+                $ref: "#/components/schemas/Recipe"
         "404":
           description: recipeId is not exists
+  /recipes/random:
+    get:
+      tags:
+        - Recipes
+      summary: Returns 3 random recipes
+      description: Returns 3 random recipes
+      responses:
+        "200":
+          description: Get 3 random recipes
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/Recipe'
+        "400":
+          description: Invalid or missing parameters
+        "404":
+          description: No recipes found
+        "500":
+          description: Internal server error
+        
 components:
   schemas:
     User:
@@ -320,7 +359,7 @@ components:
       example:
         username: my_name
         password: my_name@12
-    RecipePreview:
+    Recipe:
       type: object
       properties:
         id:
