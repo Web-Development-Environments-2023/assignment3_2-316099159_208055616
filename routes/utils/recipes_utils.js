@@ -2,6 +2,15 @@ const axios = require("axios");
 const DButils = require("./DButils");
 const api_domain = "https://api.spoonacular.com/recipes";
 
+const constSearchValidationOptions = {
+    cuisine: ["African", "Asian", "American", "British", "Cajun", "Caribbean", "Chinese", "Eastern European", "European", 
+    "French", "German", "Greek", "Indian", "Irish", "Italian", "Japanese", "Jewish", "Korean", "Latin American", "Mediterranean", 
+    "Mexican", "Middle Eastern", "Nordic", "Southern", "Spanish", "Thai", "Vietnamese"],
+    diet: ["Gluten Free", "Ketogenic", "Vegetarian", "Lacto-Vegetarian", "Ovo-Vegetarian", "Vegan", "Pescetarian", "Paleo", 
+    "Primal", "Low FODMAP", "Whole30"],
+    intolerance: ["Dairy", "Egg", "Gluten", "Grain", "Peanut", "Seafood", "Sesame", "Shellfish", "Soy", "Sulfite", "Tree Nut", "Wheat"]
+  };
+
 async function getRecipeInformation(recipe_id) {
     return await axios.get(`${api_domain}/${recipe_id}/information`, {
         params: {
@@ -58,9 +67,19 @@ async function getRandomRecipes(){
 
 async function searchByLimit(limit)
 {
-    
+    return null;
 }
 
+function searchParamsValidation(params)
+{
+    return
+        params.query != undefined && 
+        params.query.length > 0 &&
+        [5, 10, 15].includes(params.limit) &&
+        params.cuisines.every(cuisine => constSearchValidationOptions.cuisine.includes(cuisine)) &&
+        params.diets.every(diet => constSearchValidationOptions.diet.includes(diet)) &&
+        params.intolerances.every(intolerance => constSearchValidationOptions.intolerance.includes(intolerance))
+}
 
 function boolIntConverter(value)
 {

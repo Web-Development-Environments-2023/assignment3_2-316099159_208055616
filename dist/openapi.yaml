@@ -299,12 +299,106 @@ paths:
           description: No recipes found
         "500":
           description: Internal server error
-/recipes/search:
+  /recipes/search:
     get:
       tags:
         - Recipes
       summary: Search recipes by user's limitations
       description: Returns recipes
+      parameters:
+        - in: header
+          name: text
+          schema:
+            type: string
+          description: The search string that will be used
+          example: Simple potatoes in the oven
+        - in: header
+          name: limit
+          schema:
+            type: number
+            description: "Integer. 5(default), 10, or 15. Used to specify the desired number of recipes."
+            example: 10
+            enum:
+              - 5
+              - 10
+              - 15
+        - in: header
+          name: cuisines
+          schema:
+            type: array
+            items:
+              type: string
+              enum:
+                - African
+                - Asian
+                - American
+                - British
+                - Cajun
+                - Caribbean
+                - Chinese
+                - Eastern European
+                - European
+                - French
+                - German
+                - Greek
+                - Indian
+                - Irish
+                - Italian
+                - Japanese
+                - Jewish
+                - Korean
+                - Latin American
+                - Mediterranean
+                - Mexican
+                - Middle Eastern
+                - Nordic
+                - Southern
+                - Spanish
+                - Thai
+                - Vietnamese
+          description: Enum to filter to specific cuisines or none (empty means none).
+          example: [Indian, Italian]
+        - in: header
+          name: diets
+          schema:
+            type: array
+            items:
+              type: string
+              enum:
+                - Gluten Free
+                - Ketogenic
+                - Vegetarian
+                - Lacto-Vegetarian
+                - Ovo-Vegetarian
+                - Vegan
+                - Pescetarian
+                - Paleo
+                - Primal
+                - Low FODMAP
+                - Whole30
+          description: Text to filter by dietary restrictions or none (empty means none).
+          example: [Gluten Free, Vegan]
+        - in: header
+          name: intolerances
+          schema:
+            type: array
+            items:
+              type: string
+              enum:
+                - Dairy
+                - Egg
+                - Gluten
+                - Grain
+                - Peanut
+                - Seafood
+                - Sesame
+                - Shellfish
+                - Soy
+                - Sulfite
+                - Tree Nut
+                - Wheat
+          description: Text to filter by food intolerance or none (empty means none).
+          example: [Dairy, Gluten]
       responses:
         "200":
           description: Get recipes

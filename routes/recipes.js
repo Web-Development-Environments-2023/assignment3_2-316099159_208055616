@@ -10,9 +10,23 @@ const user_utils = require("./utils/user_utils");
  */
 router.get("/search", async (req, res, next) => {
   try {
-    const limit = user_utils.getSearchLimit(req.session.username);
-    const recipes = await recipes_utils.searchByLimit(limit);
-    res.status(200).send(recipes);
+    const params = {
+      query: req.header('text').trim(),
+      limit: user_utils.getSearchLimit(req.session.username),
+      cuisines: req.header('cuisines') != undefined ? req.header('cuisines').split(',') : [],
+      diets: req.header('diets') != undefined ? req.header('diets').split(',') : [],
+      intolerances: req.header('intolerances') != undefined ? req.header('intolerances').split(',') : [], 
+    }
+    const user_id = req.session.username;
+    if (recipes_utils.searchParamsValidation(params))
+    {
+      const recipes = await recipes_utils.searchByLimit(params, user_id);
+      res.status(200).send(recipes);
+    }
+    else
+    {
+      res.status(400).send("Bad request");
+    }
   } catch (error) {
     next(error);
   }
