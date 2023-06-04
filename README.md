@@ -92,6 +92,159 @@ POST /recipes/
 
 This endpoint allows you to add a new recipe.
 
+# User API
+
+This repository contains an Express.js application that provides a User API. The API allows users to manage their favorite recipes, last watched recipes, and personal recipes. It also provides endpoints to update the search limit for the user.
+
+## Installation
+
+To run the User API locally, follow these steps:
+
+1. Clone the repository:
+
+   ```
+   git clone <repository_url>
+   ```
+
+2. Install the dependencies:
+
+   ```
+   npm install
+   ```
+
+3. Start the server:
+
+   ```
+   npm start
+   ```
+
+   The API will be accessible at `http://localhost:3000`.
+
+## API Endpoints
+
+### Authentication Middleware
+
+The User API uses authentication middleware to authenticate all incoming requests. If a request is not authenticated, it will be rejected with a 401 Unauthorized status code.
+
+### Save Recipe as Favorite
+
+```
+PUT /user/favorites
+```
+
+This endpoint allows the logged-in user to save a recipe as a favorite.
+
+#### Request
+
+- Body:
+  - `recipeId`: The ID of the recipe to save as a favorite (required)
+
+#### Response
+
+- Status: 200 OK
+- Body: "The Recipe successfully saved as favorite"
+
+### Get Favorite Recipes
+
+```
+GET /user/favorites
+```
+
+This endpoint retrieves the favorite recipes saved by the logged-in user.
+
+#### Response
+
+- Status: 200 OK
+- Body: JSON array containing the favorite recipes
+
+### Save Recipe as Last Watched
+
+```
+PUT /user/lastWatched
+```
+
+This endpoint allows the logged-in user to save a recipe as last watched.
+
+#### Request
+
+- Body:
+  - `recipeId`: The ID of the recipe to save as last watched (required)
+
+#### Response
+
+- Status: 200 OK
+- Body: "The Recipe successfully added to last watched"
+
+### Get Last Watched Recipes
+
+```
+GET /user/lastWatched
+```
+
+This endpoint retrieves the last watched recipes saved by the logged-in user.
+
+#### Response
+
+- Status: 200 OK
+- Body: JSON array containing the last watched recipes
+
+### Save Recipe as My Recipes
+
+```
+PUT /user/myRecipes
+```
+
+This endpoint allows the logged-in user to save a recipe as their own recipe.
+
+#### Request
+
+- Body:
+  - `recipeId`: The ID of the recipe to save as my recipe (required)
+
+#### Response
+
+- Status: 200 OK
+- Body: "The Recipe successfully added to my recipes"
+
+### Get My Recipes
+
+```
+GET /user/myRecipes
+```
+
+This endpoint retrieves the recipes saved by the logged-in user as their own recipes.
+
+#### Response
+
+- Status: 200 OK
+- Body: JSON array containing the user's recipes
+
+### Update Search Limit
+
+```
+PUT /user/searchLimit
+```
+
+This endpoint allows the logged-in user to update their search limit.
+
+#### Request
+
+- Body:
+  - `searchLimit`: The new search limit (required)
+
+#### Response
+
+- Status: 200 OK
+- Body: "Search limit successfully updated"
+
+### Get Search Limit
+
+```
+GET /user/searchLimit
+```
+
+This endpoint retrieves the search limit of the logged-in user.
+
 #### Request
 
 - Body: JSON object representing the recipe (required)
