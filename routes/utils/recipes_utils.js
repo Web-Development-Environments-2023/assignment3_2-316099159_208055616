@@ -136,8 +136,7 @@ async function validateRecipeIdExists(recipeId)
 
 async function validateRecipeIdExistsInApi(recipeId)
 {
-    if (recipeId == undefined || recipeId == null)
-    {
+    if (recipeId == undefined || recipeId == null){
         throw { status: 400, message: "recipeId is null"};
     }
     try{

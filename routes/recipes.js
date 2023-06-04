@@ -11,15 +11,12 @@ const user_utils = require("./utils/user_utils");
  */
 router.get("/search", async (req, res, next) => {
   try {
-    if (!recipes_utils.argumentsValidation(req, res, next))
-    {
+    if (!recipes_utils.argumentsValidation(req, res, next)){
       throw { status: 400, message: "Bad request" };
     }
-    if (req.session.user_id == undefined)
-    {
+    if (req.session.user_id == undefined){
       throw { status: 401, message: "Unauthorized" };
     }
-
     const params = {
       query: req.header('text').trim(),
       limit: await user_utils.getSearchLimit(req.session.user_id), //| 5,
@@ -33,11 +30,9 @@ router.get("/search", async (req, res, next) => {
       [5, 10, 15].includes(params.limit) &&
       params.cuisines.every(cuisine => recipes_utils.constSearchValidationOptions.cuisine.includes(cuisine)) &&
       params.diets.every(diet => recipes_utils.constSearchValidationOptions.diet.includes(diet)) &&
-      params.intolerances.every(intolerance => recipes_utils.constSearchValidationOptions.intolerance.includes(intolerance)))
-    {
+      params.intolerances.every(intolerance => recipes_utils.constSearchValidationOptions.intolerance.includes(intolerance))){
       const recipes = await recipes_utils.searchByLimit(params);
-      if (recipes.length == 0)
-      {
+      if (recipes.length == 0){
         throw { status: 204, message: "No content" };
       }
       res.status(200).send(recipes);
