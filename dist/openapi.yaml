@@ -254,8 +254,6 @@ paths:
           description: User is not authorized
         "405":
           description: Method not allowed
-        "409":
-          description: Asset already in DB
         "500":
           description: Internal server error
   /recipes/{recipeId}:
