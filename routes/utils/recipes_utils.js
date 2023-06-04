@@ -1,5 +1,6 @@
 const axios = require("axios");
 const DButils = require("./DButils");
+const user_utils = require("./user_utils");
 const api_domain = "https://api.spoonacular.com/recipes";
 
 const constSearchValidationOptions = {
@@ -98,7 +99,7 @@ async function addNewRecipe(r) {
     await DButils.execQuery(
         `INSERT INTO recipes VALUES ('${id}', '${r.title}', '${r.image}', '${r.readyInMinutes}', '${r.popularity}', '${vegetarian}', '${vegan}', '${glutenFree}')`
     );
-    await users_utils.addToMyRecipes(req.session.user_id, id);
+    await user_utils.addToMyRecipes(req.session.user_id, id);
     return r;
 }
 
