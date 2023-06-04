@@ -250,10 +250,8 @@ paths:
       responses:
         "201":
           description: Recipe added successfully
-        "401":
-          description: User is not authorized
-        "405":
-          description: Method not allowed
+        "400":
+          description: Bad request
         "500":
           description: Internal server error
   /recipes/{recipeId}:

@@ -121,10 +121,6 @@ router.post("/", async (req, res, next) => {
       throw { status: 400, message: "Bad request"};
     }
     const recipe = await recipes_utils.addNewRecipe(req);
-    if (recipe.length == 0)
-    {
-      throw { status: 403, message: "Forbidden"};
-    }
     res.status(201).send(recipe);
   } catch (error) {
     next(error);
