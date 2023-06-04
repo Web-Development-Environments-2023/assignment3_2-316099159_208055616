@@ -18,12 +18,13 @@ router.get("/search", async (req, res, next) => {
       throw { status: 401, message: "Unauthorized" };
     }
     const params = {
-      query: req.header('text').trim(),
+      query: req.header('text'), //.trim(),
       limit: await user_utils.getSearchLimit(req.session.user_id), //| 5,
       cuisines: req.header('cuisines') != undefined ? req.header('cuisines').split(',') : [],
       diets: req.header('diets') != undefined ? req.header('diets').split(',') : [],
       intolerances: req.header('intolerances') != undefined ? req.header('intolerances').split(',') : [], 
     };
+    console.log("The params are: \n" + params);
     if (        
       params.query != undefined && 
       params.query.length > 0 &&
@@ -102,10 +103,10 @@ router.get("/:recipeId", async (req, res, next) => {
     next(error);
   }
   try {
-    let recipe = await recipes_utils.getRecipeDetails(req.params.recipeId);
+    let recipe = await recipes_utils.getRecipeFromDB(req.params.recipeId);
     if (!recipe)
     {
-      recipe = await recipes_utils.getRecipeFromDB(req.params.recipeId);
+      recipe = await recipes_utils.getRecipeDetails(req.params.recipeId);
     }
     if (!recipe)
     {
