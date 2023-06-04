@@ -97,8 +97,20 @@ function boolIntConverter(value)
     }
 }
 
+function validateRecipeIdExists(recipeId)
+{
+    const recipes = await DButils.execQuery("SELECT id FROM recipes");
+    if (!recipes.find((x) => x.id === recipeId)){
+        if('TODO SEARCH IN SPOONCULAR ID EXISTS AND ADD NEGATIVE BOOL{IF DOES NOT EXIST}'){
+            throw { status: 404, message: `recipeId ${recipeId} does not exist` };
+        }
+    }
+    return true
+}
+
 exports.constSearchValidationOptions = constSearchValidationOptions;
 exports.getRecipeDetails = getRecipeDetails;
 exports.addNewRecipe = addNewRecipe;
 exports.getRandomRecipes = getRandomRecipes;
 exports.searchByLimit = searchByLimit;
+exports.validateRecipeIdExists = validateRecipeIdExists;

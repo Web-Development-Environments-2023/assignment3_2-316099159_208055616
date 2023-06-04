@@ -82,7 +82,7 @@ paths:
               schema:
                 type: array
                 items:
-                  $ref: "#/components/schemas/RecipePreview"
+                  $ref: "#/components/schemas/Recipe"
         "401":
           description: user is not authorized
       security:
@@ -292,7 +292,7 @@ paths:
               schema:
                 type: array
                 items:
-                  $ref: '#/components/schemas/Recipe'
+                  $ref: "#/components/schemas/Recipe"
         "400":
           description: Invalid or missing parameters
         "404":
@@ -407,7 +407,7 @@ paths:
               schema:
                 type: array
                 items:
-                  $ref: '#/components/schemas/Recipe'
+                  $ref: "#/components/schemas/Recipe"
         "400":
           description: Invalid or missing parameters
         "404":
