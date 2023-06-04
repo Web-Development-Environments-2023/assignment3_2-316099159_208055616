@@ -13,6 +13,10 @@ const constSearchValidationOptions = {
 
   async function searchByLimit(params)
   {
+    if (params == undefined || params == null)
+    {
+        throw { status: 400, message: "params is null"};
+    }
       params.cuisines = params.cuisines.join(",");
       params.diets = params.diets.join(",");
       params.intolerances = params.intolerances.join(",");
@@ -35,6 +39,10 @@ const constSearchValidationOptions = {
   }
 
 async function getRecipeInformation(recipe_id) {
+    if (recipe_id == undefined || recipe_id == null)
+    {
+        throw { status: 400, message: "recipe_id is null"};
+    }
     return await axios.get(`${api_domain}/${recipe_id}/information`, {
         params: {
             includeNutrition: false,
@@ -44,6 +52,10 @@ async function getRecipeInformation(recipe_id) {
 }
 
 async function getRecipeDetails(recipe_id) {
+    if (recipe_id == undefined)
+    {
+        throw { status: 400, message: "recipe_id is null"};
+    }
     console.log("recipe_id: " + recipe_id);
     let recipe_info = await getRecipeInformation(recipe_id);
     let { id, title, readyInMinutes, image, aggregateLikes, vegan, vegetarian, glutenFree } = recipe_info.data;
