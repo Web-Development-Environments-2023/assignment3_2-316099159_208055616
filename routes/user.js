@@ -105,6 +105,7 @@ router.get('/lastWatched', async (req, res, next) => {
     lastWatchedRecipesDetails = []
     for (let i = 0; i < lastWatched.length; i++) {
 <<<<<<< HEAD
+<<<<<<< HEAD
       const recipe_information = await recipe_utils.getRecipeFromDB(lastWatched[i]);
       if (recipe_information === undefined || recipe_information === null || recipe_information.length === 0){
         await recipe_utils.getRecipeDetails(lastWatched[i])
@@ -121,6 +122,12 @@ router.get('/lastWatched', async (req, res, next) => {
         }
       );
 >>>>>>> 4b2714c6fea0dba2041a30e1a31d5a946dc40277
+=======
+      let recipe_information = await recipe_utils.getRecipeFromDB(lastWatched[i]);
+      if (recipe_information === undefined || recipe_information === null || recipe_information.length === 0){
+        recipe_information = await recipe_utils.getRecipeDetails(lastWatched[i])
+      }
+>>>>>>> 1c4fee0373ace783675bac5e424e856728a9a046
       lastWatchedRecipesDetails.push(recipe_information)
     }
     if (lastWatchedRecipesDetails.length === 0){

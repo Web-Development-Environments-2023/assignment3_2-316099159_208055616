@@ -242,3 +242,4 @@ exports.getRandomRecipes = getRandomRecipes;
 exports.searchByLimit = searchByLimit;
 exports.validateRecipeIdExists = validateRecipeIdExists;
 exports.validateRecipeIdExistsInApi = validateRecipeIdExistsInApi;
+exports.getRecipeInformationInDBAndInApi = getRecipeInformationInDBAndInApi;
