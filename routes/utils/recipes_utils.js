@@ -155,7 +155,8 @@ function getRecipeFromDB(recipe_id) {
     {
         throw { status: 400, message: "recipe_id is null"};
     }
-    return DButils.execQuery(`SELECT * FROM recipes WHERE id = '${recipe_id}'`);
+    let [value] = DButils.execQuery(`SELECT * FROM recipes WHERE id = '${recipe_id}'`);
+    return value;
 }
 
 function boolIntConverter(value)
