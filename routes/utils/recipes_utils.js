@@ -97,13 +97,27 @@ function boolIntConverter(value)
     }
 }
 
-function validateRecipeIdExists(recipeId)
+async function validateRecipeIdExistsInDB(recipeId)
 {
     const recipes = await DButils.execQuery("SELECT id FROM recipes");
     if (!recipes.find((x) => x.id === recipeId)){
-        if('TODO SEARCH IN SPOONCULAR ID EXISTS AND ADD NEGATIVE BOOL{IF DOES NOT EXIST}'){
+        if(!validateRecipeIdExistsInApi(recipeId)){
             throw { status: 404, message: `recipeId ${recipeId} does not exist` };
         }
+    }
+    return true
+}
+
+async function validateRecipeIdExistsInApi(recipeId)
+{
+    const recipe = await axios.get(`${api_domain}/${recipeId}/information`, {
+        params: {
+            includeNutrition: false,
+            apiKey: process.env.spooncular_apiKey
+        }
+    });
+    if (!recipe){
+        throw { status: 404, message: `recipeId ${recipeId} does not exist` };
     }
     return true
 }
@@ -113,4 +127,5 @@ exports.getRecipeDetails = getRecipeDetails;
 exports.addNewRecipe = addNewRecipe;
 exports.getRandomRecipes = getRandomRecipes;
 exports.searchByLimit = searchByLimit;
-exports.validateRecipeIdExists = validateRecipeIdExists;
+exports.validateRecipeIdExistsInDB = validateRecipeIdExistsInDB;
+exports.validateRecipeIdExistsInApi = validateRecipeIdExistsInApi;
