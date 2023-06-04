@@ -209,7 +209,7 @@ const argumentsValidation = (req, res, next) => {
 async function generateNewId()
 {
     let result = await DButils.execQuery("SELECT MAX(id) as id FROM latestindex");
-    newId = result[0].id + 1;
+    newId = "000" + result[0].id + 1;
     console.log("Recipe new Id is: " + newId);
     await DButils.execQuery(`INSERT INTO latestindex VALUES ('${newId}')`);
     return newId;
