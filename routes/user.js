@@ -178,7 +178,7 @@ router.get('/myRecipes', async (req, res, next) => {
   try {
     const user_id = req.session.user_id;
     const searchLimit = await user_utils.getSearchLimit(user_id);
-    res.status(200).json({ searchLimit });
+    res.status(200).json({ 'searchLimit': searchLimit });
   } catch (error) {
     next(error);
   }

@@ -1,3 +1,4 @@
+const { Int } = require("mssql");
 const DButils = require("./DButils");
 const recipes_utils = require("./recipes_utils");
 
@@ -107,14 +108,10 @@ async function getSearchLimit(user_id) {
     if (user_id === undefined || user_id === null){
         throw { status: 400, message: `user_id is undefined or null` };
     }
-    try{
-        const result = await DButils.execQuery(`SELECT searchLimit FROM users WHERE username='${user_id}'`);
-        const searchLimit = result[0].searchLimit
-        console.log(`searchLimit = ${searchLimit}`)
-        return searchLimit
-    }catch (error) {
-            return 5;
-        }
+    const result = await DButils.execQuery(`SELECT searchLimit FROM users WHERE username='${user_id}'`);
+    const searchLimit = result[0].searchLimit
+    console.log(`searchLimit = ${searchLimit}`)
+    return searchLimit
 }
   
 // updates SerachLimit that were saved by the logged-in user
@@ -122,7 +119,7 @@ async function updateSerachLimit(user_id, userSerachLimit) {
     if (user_id === undefined || user_id === null){
         throw { status: 400, message: `user_id is undefined or null` };
     }
-    if (userSerachLimit === undefined || userSerachLimit === null){
+    if (typeof(userSerachLimit) !==  Number){
         throw { status: 401, message: `userSerachLimit is undefined or null` };
     }
     await DButils.execQuery(`UPDATE users SET searchLimit='${userSerachLimit}' WHERE username='${user_id}'`);

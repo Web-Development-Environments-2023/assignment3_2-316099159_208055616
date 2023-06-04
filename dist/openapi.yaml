@@ -231,8 +231,12 @@ paths:
           content:
             application/json:
               schema:
-                type: integer
-                example: 10
+                type: object
+                properties:
+                  searchLimit:
+                    type: integer
+                    description: searchLimit of user to change setting
+                    example: 10
         "401":
           description: User is not authorized
       security:
