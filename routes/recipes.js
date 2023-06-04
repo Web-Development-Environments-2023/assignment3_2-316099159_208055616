@@ -104,7 +104,7 @@ router.get("/:recipeId", async (req, res, next) => {
   }
   try {
     let recipe = await recipes_utils.getRecipeFromDB(req.params.recipeId);
-    if (!recipe)
+    if (!recipe || recipe == undefined || recipe.length == 0 )
     {
       recipe = await recipes_utils.getRecipeDetails(req.params.recipeId);
     }
