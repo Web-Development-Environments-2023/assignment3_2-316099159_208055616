@@ -89,15 +89,20 @@ async function addNewRecipe(r) {
 }
 
 async function getRandomRecipes(){
-    let result = await axios.get(`${api_domain}/random`,
-    {   
-        params:
-        {
-            number: 3, 
-            apiKey:process.env.spooncular_apiKey,
-        }
-    });
+    try{
+        let result = await axios.get(`${api_domain}/random`,
+        {   
+            params:
+            {
+                number: 3, 
+                apiKey:process.env.spooncular_apiKey,
+            }
+        });
     return result.data["recipes"];
+    } 
+    catch (error) {
+        throw { status: 500, message: "error in getRandomRecipes"};
+    }
 }
 
 function boolIntConverter(value)
@@ -154,8 +159,15 @@ const argumentsValidation = (req, res, next) => {
     return (req != null && req.body != null && res != null && next != null);
 }
 
+async function getLatestId()
+{
+    let result = await DButils.execQuery("SELECT MAX(id) FROM latestindex");
+    return result[0];
+}
+
 exports.constSearchValidationOptions = constSearchValidationOptions;
 exports.argumentsValidation = argumentsValidation;
+exports.getLatestId = getLatestId;
 exports.getRecipeDetails = getRecipeDetails;
 exports.addNewRecipe = addNewRecipe;
 exports.getRandomRecipes = getRandomRecipes;
