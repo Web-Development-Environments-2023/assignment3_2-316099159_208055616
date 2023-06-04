@@ -51,7 +51,7 @@ router.get("/search", async (req, res, next) => {
 });
 
 /**
- * GET 3 random recipes
+ * GET - 3 random recipes
  * @returns {JSON} - 3 random recipes
  * @example http://localhost:3000/recipes/random
  */
@@ -78,7 +78,7 @@ router.get("/random", async (req, res, next) => {
 });
 
 /**
- * GET request to get recipe details
+ * GET - get recipe details
  * @param {int} recipeId - the id of the recipe
  * @returns {JSON} - the recipe details
  * @example http://localhost:3000/recipes/123/information
@@ -102,7 +102,7 @@ router.get("/:recipeId", async (req, res, next) => {
 });
 
 /**
- * POST request to create a new recipe
+ * POST - create a new recipe
  * @param {JSON} recipe - the recipe to add
  * @returns {JSON} - the recipe that was added
  * @example http://localhost:3000/recipes/
