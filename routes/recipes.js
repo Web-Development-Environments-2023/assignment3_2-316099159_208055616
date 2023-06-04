@@ -12,7 +12,7 @@ router.get("/search", async (req, res, next) => {
   try {
     const params = {
       query: req.header('text').trim(),
-      limit: 5, //user_utils.getSearchLimit(req.session.username) | 5,
+      limit: user_utils.getSearchLimit(req.session.username) | 5,
       cuisines: req.header('cuisines') != undefined ? req.header('cuisines').split(',') : [],
       diets: req.header('diets') != undefined ? req.header('diets').split(',') : [],
       intolerances: req.header('intolerances') != undefined ? req.header('intolerances').split(',') : [], 
