@@ -15,7 +15,7 @@ tags:
   - name: Users
     description: All the user's personal app info
   - name: Recipes
-    description: All reciepes general info
+    description: All recipes general info
 paths:
   /register:
     post:
@@ -106,7 +106,7 @@ paths:
               properties:
                 recipeId:
                   type: string
-                  description: reciepe's id which the user saved
+                  description: recipe's id which the user saved
                   example: 123
       responses:
         "200":
