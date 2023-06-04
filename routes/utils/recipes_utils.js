@@ -77,12 +77,13 @@ async function addNewRecipe(r) {
     {
         throw { status: 400, message: "recipe is null"};
     }
+    let id = await generateNewId();
     vegan = boolIntConverter(r.vegan);
     vegetarian = boolIntConverter(r.vegetarian);
     glutenFree = boolIntConverter(r.glutenFree);
     console.log("addNewRecipe");
     await DButils.execQuery(
-        `INSERT INTO recipes VALUES ('${r.id}', '${r.title}', '${r.image}', 
+        `INSERT INTO recipes VALUES ('${id}', '${r.title}', '${r.image}', 
         '${r.readyInMinutes}', '${r.popularity}', '${vegetarian}', '${vegan}', '${glutenFree}')`
     );
     return r;
@@ -159,15 +160,18 @@ const argumentsValidation = (req, res, next) => {
     return (req != null && req.body != null && res != null && next != null);
 }
 
-async function getLatestId()
+async function generateNewId()
 {
-    let result = await DButils.execQuery("SELECT MAX(id) FROM latestindex");
-    return result[0];
+    let result = await DButils.execQuery("SELECT MAX(id) as id FROM latestindex");
+    newId = result[0].id + 1;
+    console.log("Recipe new Id is: " + newId);
+    await DButils.execQuery(`INSERT INTO latestindex VALUES ('${newId}')`);
+    return newId;
 }
 
 exports.constSearchValidationOptions = constSearchValidationOptions;
 exports.argumentsValidation = argumentsValidation;
-exports.getLatestId = getLatestId;
+exports.generateNewId = generateNewId;
 exports.getRecipeDetails = getRecipeDetails;
 exports.addNewRecipe = addNewRecipe;
 exports.getRandomRecipes = getRandomRecipes;
