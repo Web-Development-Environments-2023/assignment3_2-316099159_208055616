@@ -55,11 +55,11 @@ router.get("/random", async (req, res, next) => {
   try{
     if (!recipes_utils.argumentsValidation(req, res, next))
     {
-      throw { status: 400, message: "Bad request, request arguments are not compliant with the schema" };
+      throw { status: 401, message: "Unauthorized" };
     }
     if (req.body == undefined)
     {
-      throw { status: 400, message: "Bad request, request body is undefined or null" };
+      throw { status: 401, message: "Unauthorized" };
     }
   } catch (error) {
     next(error);
