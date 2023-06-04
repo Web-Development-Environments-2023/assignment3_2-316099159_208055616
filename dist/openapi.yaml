@@ -15,7 +15,7 @@ tags:
   - name: Users
     description: All the user's personal app info
   - name: Recipes
-    description: All reciepes general info
+    description: All recipes general info
 paths:
   /register:
     post:
@@ -106,7 +106,7 @@ paths:
               properties:
                 recipeId:
                   type: string
-                  description: reciepe's id which the user saved
+                  description: recipe's id which the user saved
                   example: 123
       responses:
         "200":
@@ -116,7 +116,7 @@ paths:
         "401":
           description: user is not authorized
         "404":
-          description: recepie with id not found
+          description: recipe with id not found
         "409":
           description: Asset already in DB
       security:
@@ -135,7 +135,7 @@ paths:
               schema:
                 type: array
                 items:
-                  $ref: "#/components/schemas/RecipePreview"
+                  $ref: "#/components/schemas/Recipe"
         "204":
           description: no items in user's lastWatched
         "401":
@@ -165,7 +165,7 @@ paths:
         "401":
           description: User is not authorized
         "404":
-          description: recepie with id not found
+          description: recipe with id not found
         "409":
           description: Asset already in DB
       security:
@@ -184,7 +184,7 @@ paths:
               schema:
                 type: array
                 items:
-                  $ref: "#/components/schemas/RecipePreview"
+                  $ref: "#/components/schemas/Recipe"
         "204":
           description: no items in user's myRecipes
         "401":
@@ -214,7 +214,7 @@ paths:
         "401":
           description: User is not authorized
         "404":
-          description: recepie with id not found
+          description: recipe with id not found
         "409":
           description: Asset already in DB
       security:
@@ -231,8 +231,12 @@ paths:
           content:
             application/json:
               schema:
-                type: integer
-                example: 10
+                type: object
+                properties:
+                  searchLimit:
+                    type: integer
+                    description: searchLimit of user to change setting
+                    example: 10
         "401":
           description: User is not authorized
       security:
@@ -255,6 +259,8 @@ paths:
       responses:
         "200":
           description: The searchLimit was changed successfully on the user's
+        "400":
+          description: bad request
         "401":
           description: User is not authorized
       security:
