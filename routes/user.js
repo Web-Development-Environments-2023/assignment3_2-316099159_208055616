@@ -104,10 +104,23 @@ router.get('/lastWatched', async (req, res, next) => {
     const lastWatched = await user_utils.getLastWatched(user_id);
     lastWatchedRecipesDetails = []
     for (let i = 0; i < lastWatched.length; i++) {
+<<<<<<< HEAD
       const recipe_information = await recipe_utils.getRecipeFromDB(lastWatched[i]);
       if (recipe_information === undefined || recipe_information === null || recipe_information.length === 0){
         await recipe_utils.getRecipeDetails(lastWatched[i])
       }
+=======
+      console.log(lastWatched[i])
+      console.log(`${process.env.api_domain}/${lastWatched[i]}/information`)
+      const recipe_information = await axios.get(`${process.env.api_domain}/${lastWatched[i]}/information`,
+      {
+        params: {
+          includeNutrition: false,
+          apiKey: process.env.spooncular_apiKey
+          }
+        }
+      );
+>>>>>>> 4b2714c6fea0dba2041a30e1a31d5a946dc40277
       lastWatchedRecipesDetails.push(recipe_information)
     }
     if (lastWatchedRecipesDetails.length === 0){
