@@ -7,7 +7,7 @@ const recipes_utils = require("./recipes_utils");
  */
 async function getUserRecipesData(user_id){
     if (user_id === undefined || user_id === null){
-        throw { status: 401, message: `user_id is undefined or null` };
+        throw { status: 400, message: `user_id is undefined or null` };
     }
     const result = await DButils.execQuery(`SELECT recipesData FROM users WHERE username='${user_id}'`);
     recipesData = result[0].recipesData
@@ -18,7 +18,7 @@ async function getUserRecipesData(user_id){
 // returns array of favorites recipes that were saved by the logged-in user
 async function getFavoriteRecipes(user_id){
     if (user_id === undefined || user_id === null){
-        throw { status: 401, message: `user_id is undefined or null` };
+        throw { status: 400, message: `user_id is undefined or null` };
     }
     const recipesData = await getUserRecipesData(user_id);
     const favoriteRecipes = recipesData.favorites;
@@ -29,7 +29,7 @@ async function getFavoriteRecipes(user_id){
  // updates array of favorites recipes that were saved by the logged-in user
 async function markAsFavorite(user_id, recipe_id){
     if (recipe_id === undefined || recipe_id === null){
-        throw { status: 401, message: `recipe_id is undefined or null` };
+        throw { status: 400, message: `recipe_id is undefined or null` };
     }
     if (!recipes_utils.validateRecipeIdExists(recipe_id)){
         throw { status: 404, message: `recipe_id ${recipe_id} not found` };
@@ -45,7 +45,7 @@ async function markAsFavorite(user_id, recipe_id){
 // returns sorted by time array of last watched recipes that were saved by the logged-in user
 async function getLastWatched(user_id) {
     if (user_id === undefined || user_id === null){
-        throw { status: 401, message: `user_id is undefined or null` };
+        throw { status: 400, message: `user_id is undefined or null` };
     }
     const recipesData = await getUserRecipesData(user_id);
     const lastWatched = recipesData.lastWatched;
@@ -56,10 +56,10 @@ async function getLastWatched(user_id) {
 // updates sorted by time array of last watched recipes that were saved by the logged-in user
 async function addToLastWatched(user_id, recipe_id) {
     if (recipe_id === undefined || recipe_id === null){
-        throw { status: 401, message: `recipe_id is undefined or null` };
+        throw { status: 400, message: `recipe_id is undefined or null` };
     }
     if (user_id === undefined || user_id === null){
-        throw { status: 401, message: `user_id is undefined or null` };
+        throw { status: 400, message: `user_id is undefined or null` };
     }
     if (!recipes_utils.validateRecipeIdExists(recipe_id)){
         throw { status: 404, message: `recipe_id ${recipe_id} not found` };
@@ -75,7 +75,7 @@ async function addToLastWatched(user_id, recipe_id) {
 // returns array of users recipes recipes that were saved by the logged-in user
 async function getMyRecipes(user_id) {
     if (user_id === undefined || user_id === null){
-        throw { status: 401, message: `user_id is undefined or null` };
+        throw { status: 400, message: `user_id is undefined or null` };
     }
   const recipesData = await getUserRecipesData(user_id);
   const myRecipes = recipesData.myRecipes;
@@ -86,10 +86,10 @@ async function getMyRecipes(user_id) {
 // updates array of users recipes recipes that were saved by the logged-in user
 async function addToMyRecipes(user_id, recipe_id) {
     if (recipe_id === undefined || recipe_id === null){
-        throw { status: 401, message: `recipe_id is undefined or null` };
+        throw { status: 400, message: `recipe_id is undefined or null` };
     }
     if (user_id === undefined || user_id === null){
-        throw { status: 401, message: `user_id is undefined or null` };
+        throw { status: 400, message: `user_id is undefined or null` };
     }
     if (!recipes_utils.validateRecipeIdExists(recipe_id)){
         throw { status: 404, message: `recipe_id ${recipe_id} not found` };
@@ -105,7 +105,7 @@ async function addToMyRecipes(user_id, recipe_id) {
 // returns SerachLimit of logged-in user
 async function getSearchLimit(user_id) {
     if (user_id === undefined || user_id === null){
-        throw { status: 401, message: `user_id is undefined or null` };
+        throw { status: 400, message: `user_id is undefined or null` };
     }
     try{
         const result = await DButils.execQuery(`SELECT searchLimit FROM users WHERE username='${user_id}'`);
@@ -120,7 +120,7 @@ async function getSearchLimit(user_id) {
 // updates SerachLimit that were saved by the logged-in user
 async function updateSerachLimit(user_id, userSerachLimit) {
     if (user_id === undefined || user_id === null){
-        throw { status: 401, message: `user_id is undefined or null` };
+        throw { status: 400, message: `user_id is undefined or null` };
     }
     if (userSerachLimit === undefined || userSerachLimit === null){
         throw { status: 401, message: `userSerachLimit is undefined or null` };

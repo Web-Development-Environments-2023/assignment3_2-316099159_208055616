@@ -52,7 +52,7 @@ async function getRecipeInformation(recipe_id) {
 }
 
 async function getRecipeDetails(recipe_id) {
-    if (recipe_id == undefined)
+    if (recipe_id == undefined || recipe_id == null)
     {
         throw { status: 400, message: "recipe_id is null"};
     }
@@ -73,6 +73,10 @@ async function getRecipeDetails(recipe_id) {
 }
 
 async function addNewRecipe(r) {
+    if (r == undefined || r == null)
+    {
+        throw { status: 400, message: "recipe is null"};
+    }
     vegan = boolIntConverter(r.vegan);
     vegetarian = boolIntConverter(r.vegetarian);
     glutenFree = boolIntConverter(r.glutenFree);
@@ -111,6 +115,10 @@ function boolIntConverter(value)
 
 async function validateRecipeIdExists(recipeId)
 {
+    if (recipeId == undefined || recipeId == null)
+    {
+        throw { status: 400, message: "recipeId is null"};
+    }
     const recipes = await DButils.execQuery("SELECT id FROM recipes");
     if (!recipes.find((x) => x.id === recipeId)){
         if(!validateRecipeIdExistsInApi(recipeId)){
@@ -122,6 +130,10 @@ async function validateRecipeIdExists(recipeId)
 
 async function validateRecipeIdExistsInApi(recipeId)
 {
+    if (recipeId == undefined || recipeId == null)
+    {
+        throw { status: 400, message: "recipeId is null"};
+    }
     try{
     const recipe = await axios.get(`${api_domain}/${recipeId}/information`, {
         params: {
