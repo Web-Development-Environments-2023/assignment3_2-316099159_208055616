@@ -72,7 +72,7 @@ async function getRecipeDetails(recipe_id) {
         {
             throw { status: 400, message: "recipe_id is null"};
         }
-        if (parseInt(recipe_id) <= 0)
+        if (recipe_id === "0" || parseInt(recipe_id) === 0 || parseInt(recipe_id) < 0)
         {
             throw { status: 400, message: "recipe_id is not valid"};
         }
@@ -91,7 +91,7 @@ async function getRecipeDetails(recipe_id) {
         }
     }
     catch (error) {
-        throw { status: 500, message: "error in getRecipeDetails"};
+        throw error;
     }
 }
 
