@@ -9,7 +9,7 @@ const user_utils = require("./utils/user_utils");
  * @example http://localhost:3000/recipes/search
  */
 router.get("/search", async (req, res, next) => {
-  if (!argumentsValidation(req, res, next))
+  if (!recipes_utils.argumentsValidation(req, res, next))
   {
     throw { status: 400, message: "Bad request" };
   }
@@ -60,7 +60,7 @@ router.get("/search", async (req, res, next) => {
  * @example http://localhost:3000/recipes/random
  */
 router.get("/random", async (req, res, next) => {
-  if (!argumentsValidation(req, res, next))
+  if (!recipes_utils.argumentsValidation(req, res, next))
   {
     throw { status: 400, message: "Bad request" };
   }
@@ -92,7 +92,7 @@ router.get("/random", async (req, res, next) => {
  * @example http://localhost:3000/recipes/123/information
  */
 router.get("/:recipeId", async (req, res, next) => {
-  if (!argumentsValidation(req, res, next))
+  if (!recipes_utils.argumentsValidation(req, res, next))
   {
     throw { status: 400, message: "Bad request" };
   }
@@ -120,7 +120,7 @@ router.get("/:recipeId", async (req, res, next) => {
  * @example http://localhost:3000/recipes/
  */
 router.post("/", async (req, res, next) => {
-  if (!argumentsValidation(req, res, next))
+  if (!recipes_utils.argumentsValidation(req, res, next))
   {
     throw { status: 400, message: "Bad request" };
   }
