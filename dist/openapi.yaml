@@ -135,7 +135,7 @@ paths:
               schema:
                 type: array
                 items:
-                  $ref: "#/components/schemas/RecipePreview"
+                  $ref: "#/components/schemas/Recipe"
         "204":
           description: no items in user's lastWatched
         "401":
@@ -184,7 +184,7 @@ paths:
               schema:
                 type: array
                 items:
-                  $ref: "#/components/schemas/RecipePreview"
+                  $ref: "#/components/schemas/Recipe"
         "204":
           description: no items in user's myRecipes
         "401":
