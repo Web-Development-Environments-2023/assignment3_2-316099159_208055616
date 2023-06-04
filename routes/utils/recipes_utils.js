@@ -221,8 +221,19 @@ async function generateNewId()
     return newId;
 }
 
+async function getRecipeInformationInDBAndInApi(rId)
+{
+    let recipe = await getRecipeFromDB(rId);
+    if (recipe.length == 0)
+    {
+        recipe = await getRecipeInformation(rId);
+    }
+    return recipe;
+}
+
 exports.constSearchValidationOptions = constSearchValidationOptions;
 exports.argumentsValidation = argumentsValidation;
+exports.getRecipeInformation = getRecipeInformation;
 exports.getRecipeFromDB = getRecipeFromDB;
 exports.generateNewId = generateNewId;
 exports.getRecipeDetails = getRecipeDetails;
