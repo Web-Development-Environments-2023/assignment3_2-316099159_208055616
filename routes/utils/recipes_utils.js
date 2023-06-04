@@ -66,23 +66,27 @@ async function getRecipeInformation(recipe_id) {
 }
 
 async function getRecipeDetails(recipe_id) {
-    if (recipe_id == undefined || recipe_id == null)
-    {
-        throw { status: 400, message: "recipe_id is null"};
+    try{
+        if (recipe_id == undefined || recipe_id == null)
+        {
+            throw { status: 400, message: "recipe_id is null"};
+        }
+        console.log("recipe_id: " + recipe_id);
+        let recipe_info = await getRecipeInformation(recipe_id);
+        let { id, title, readyInMinutes, image, aggregateLikes, vegan, vegetarian, glutenFree } = recipe_info.data;
+        return {
+            id: id,
+            title: title,
+            readyInMinutes: readyInMinutes,
+            image: image,
+            popularity: aggregateLikes,
+            vegan: vegan,
+            vegetarian: vegetarian,
+            glutenFree: glutenFree,
+        }
     }
-    console.log("recipe_id: " + recipe_id);
-    let recipe_info = await getRecipeInformation(recipe_id);
-    let { id, title, readyInMinutes, image, aggregateLikes, vegan, vegetarian, glutenFree } = recipe_info.data;
-    return {
-        id: id,
-        title: title,
-        readyInMinutes: readyInMinutes,
-        image: image,
-        popularity: aggregateLikes,
-        vegan: vegan,
-        vegetarian: vegetarian,
-        glutenFree: glutenFree,
-        
+    catch (error) {
+        throw { status: 500, message: "error in getRecipeDetails"};
     }
 }
 
@@ -139,6 +143,14 @@ async function getRandomRecipes(){
     catch (error) {
         throw { status: 500, message: "error in getRandomRecipes"};
     }
+}
+
+function getRecipeFromDB(recipe_id) {
+    if (recipe_id == undefined || recipe_id == null)
+    {
+        throw { status: 400, message: "recipe_id is null"};
+    }
+    return DButils.execQuery(`SELECT * FROM recipes WHERE id = '${recipe_id}'`);
 }
 
 function boolIntConverter(value)
@@ -205,6 +217,7 @@ async function generateNewId()
 
 exports.constSearchValidationOptions = constSearchValidationOptions;
 exports.argumentsValidation = argumentsValidation;
+exports.getRecipeFromDB = getRecipeFromDB;
 exports.generateNewId = generateNewId;
 exports.getRecipeDetails = getRecipeDetails;
 exports.addNewRecipe = addNewRecipe;

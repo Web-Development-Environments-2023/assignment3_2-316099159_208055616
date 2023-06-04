@@ -96,8 +96,12 @@ router.get("/:recipeId", async (req, res, next) => {
     next(error);
   }
   try {
-    const recipe = await recipes_utils.getRecipeDetails(req.params.recipeId);
-    if (recipe.length == 0)
+    let recipe = await recipes_utils.getRecipeDetails(req.params.recipeId);
+    if (!recipe)
+    {
+      recipe = await recipes_utils.getRecipeFromDB(req.params.recipeId);
+    }
+    if (!recipe)
     {
       throw { status: 404, message: "Not found" };
     }
