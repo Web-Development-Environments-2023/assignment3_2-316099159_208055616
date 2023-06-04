@@ -117,9 +117,9 @@ async function validateRecipeIdExistsInApi(recipeId)
         }
     });
     if (!recipe){
-        throw { status: 404, message: `recipeId ${recipeId} does not exist` };
+        return false;
     }
-    return true
+    return true;
 }
 
 exports.constSearchValidationOptions = constSearchValidationOptions;
