@@ -83,23 +83,26 @@ router.get("/random", async (req, res, next) => {
  * @example http://localhost:3000/recipes/123/information
  */
 router.get("/:recipeId", async (req, res, next) => {
-  if (!recipes_utils.argumentsValidation(req, res, next))
-  {
-    throw { status: 400, message: "Bad request" };
-  }
-  if (req.params.recipeId == undefined)
-  {
-    res.status(400).send("Bad request");
+  try{
+    if (!recipes_utils.argumentsValidation(req, res, next))
+    {
+      throw { status: 400, message: "Bad request" };
+    }
+    if (req.params.recipeId == undefined)
+    {
+      throw { status: 400, message: "Bad request" };
+    }
+  } catch (error) {
+    next(error);
   }
   try {
     const recipe = await recipes_utils.getRecipeDetails(req.params.recipeId);
     if (recipe.length == 0)
     {
-      res.status(404).send("Not found");
+      throw { status: 404, message: "Not found" };
     }
     res.status(200).send(recipe);
   } catch (error) {
-    res.status(500).send("Internal server error, please make sure you are logged in");
     next(error);
   }
 });
