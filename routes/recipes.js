@@ -39,7 +39,7 @@ router.get("/search", async (req, res, next) => {
     }
     else
     {
-      res.status(405).send("Forbidden");
+      throw { status: 404, message: "Not found" };
     }
   } catch (error) {
     next(error);
