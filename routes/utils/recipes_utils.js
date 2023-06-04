@@ -1,6 +1,7 @@
 const axios = require("axios");
 const DButils = require("./DButils");
 const user_utils = require("./user_utils");
+const { parse } = require("path");
 const api_domain = "https://api.spoonacular.com/recipes";
 
 const constSearchValidationOptions = {
@@ -71,7 +72,7 @@ async function getRecipeDetails(recipe_id) {
         {
             throw { status: 400, message: "recipe_id is null"};
         }
-        if (recipe_id <= 0)
+        if (parseInt(recipe_id) <= 0)
         {
             throw { status: 400, message: "recipe_id is not valid"};
         }
