@@ -35,8 +35,8 @@ router.put('/favorites', async (req,res,next) => {
   try{
     const user_id = req.session.user_id;
     const recipe_id = req.body.recipeId;
-    if (typeof recipe_id !== 'number'){
-      throw { status: 400, message: `recipeId must be number` };
+    if (typeof recipe_id !== 'string'){
+      throw { status: 400, message: `recipeId must be string numeric` };
     }
     await user_utils.markAsFavorite(user_id, recipe_id);
     res.status(200).send("The Recipe successfully saved as favorite");
@@ -80,8 +80,8 @@ router.put('/lastWatched', async (req, res, next) => {
   try {
     const user_id = req.session.user_id;
     const recipe_id = req.body.recipeId;
-    if (typeof recipe_id !== 'number'){
-      throw { status: 400, message: `recipeId must be number` };
+    if (typeof recipe_id !== 'string'){
+      throw { status: 400, message: `recipeId must be string numeric` };
     }
     await user_utils.addToLastWatched(user_id, recipe_id);
     res.status(200).send("The Recipe successfully added to last watched");
