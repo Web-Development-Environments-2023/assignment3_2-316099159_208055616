@@ -58,8 +58,8 @@ router.get('/favorites', async (req,res,next) => {
     const recipes_ids = await user_utils.getFavoriteRecipes(user_id);
     favoriteRecipesDetails = []
     for (let i = 0; i < recipes_ids.length; i++) {
-      const result = await recipe_utils.getRecipeFromDB(recipes_ids[i]);
-      favoriteRecipesDetails.push(result)
+      const recipe_information = await recipe_utils.getRecipeFromDB(recipes_ids[i]);
+      favoriteRecipesDetails.push(recipe_information)
     }
     if (favoriteRecipesDetails.length === 0){
       throw { status: 204, message: `no favorites` };
@@ -104,8 +104,8 @@ router.get('/lastWatched', async (req, res, next) => {
     const lastWatched = await user_utils.getLastWatched(user_id);
     lastWatchedRecipesDetails = []
     for (let i = 0; i < lastWatched.length; i++) {
-      const result = await axios.get(`${process.env.api_domain}/${lastWatched[i]}`);
-      lastWatchedRecipesDetails.push(result)
+      const recipe_information = await axios.get(`${process.env.api_domain}/${lastWatched[i]}`);
+      lastWatchedRecipesDetails.push(recipe_information)
     }
     if (lastWatchedRecipesDetails.length === 0){
       throw { status: 204, message: `no lastWatched` };
@@ -128,8 +128,8 @@ router.get('/myRecipes', async (req, res, next) => {
     const myRecipes = await user_utils.getMyRecipes(user_id);
     myRecipesDetails = []
     for (let i = 0; i < myRecipes.length; i++) {
-      const result = await recipe_utils.getRecipeFromDB(myRecipes[i]);
-      myRecipesDetails.push(result)
+      const recipe_information = await recipe_utils.getRecipeFromDB(myRecipes[i]);
+      myRecipesDetails.push(recipe_information)
     }
     if (myRecipesDetails.length === 0){
       throw { status: 204, message: `no myRecipes` };
