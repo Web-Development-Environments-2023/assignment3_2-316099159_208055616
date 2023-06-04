@@ -97,7 +97,7 @@ function boolIntConverter(value)
     }
 }
 
-async function validateRecipeIdExistsInDB(recipeId)
+async function validateRecipeIdExists(recipeId)
 {
     const recipes = await DButils.execQuery("SELECT id FROM recipes");
     if (!recipes.find((x) => x.id === recipeId)){
@@ -127,5 +127,5 @@ exports.getRecipeDetails = getRecipeDetails;
 exports.addNewRecipe = addNewRecipe;
 exports.getRandomRecipes = getRandomRecipes;
 exports.searchByLimit = searchByLimit;
-exports.validateRecipeIdExistsInDB = validateRecipeIdExistsInDB;
+exports.validateRecipeIdExists = validateRecipeIdExists;
 exports.validateRecipeIdExistsInApi = validateRecipeIdExistsInApi;
