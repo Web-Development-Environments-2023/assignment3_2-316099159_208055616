@@ -105,7 +105,7 @@ paths:
               type: object
               properties:
                 recipeId:
-                  type: string
+                  type: integer
                   description: recipe's id which the user saved
                   example: 123
       responses:
@@ -154,7 +154,7 @@ paths:
               type: object
               properties:
                 recipeId:
-                  type: string
+                  type: integer
                   description: Recipe's ID which the user wants to add to the last watched list
                   example: 123
       responses:

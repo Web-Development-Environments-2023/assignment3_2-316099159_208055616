@@ -88,9 +88,9 @@ router.get("/:recipeId", async (req, res, next) => {
     {
       throw { status: 400, message: "Bad request" };
     }
-    if (req.params.recipeId == undefined)
+    if (typeof req.params.recipeId !== 'number')
     {
-      throw { status: 400, message: "Bad request" };
+      throw { status: 400, message: "recipeId must be int" };
     }
   } catch (error) {
     next(error);
