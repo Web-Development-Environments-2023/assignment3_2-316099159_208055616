@@ -11,6 +11,29 @@ const constSearchValidationOptions = {
     intolerance: ["Dairy", "Egg", "Gluten", "Grain", "Peanut", "Seafood", "Sesame", "Shellfish", "Soy", "Sulfite", "Tree Nut", "Wheat"]
   };
 
+  async function searchByLimit(params)
+  {
+      params.cuisines = params.cuisines.join(",");
+      params.diets = params.diets.join(",");
+      params.intolerances = params.intolerances.join(",");
+  
+      let result = await axios.get(`${api_domain}/complexSearch`,
+      {
+          params:
+          {
+              query: params.query,
+              cuisine: params.cuisines,
+              diet: params.diets,
+              intolerances: params.intolerances,
+              number: params.limit,
+              apiKey:process.env.spooncular_apiKey,
+              addRecipeInformation: true,
+          }
+      });
+
+      return result.data["results"];
+  }
+
 async function getRecipeInformation(recipe_id) {
     return await axios.get(`${api_domain}/${recipe_id}/information`, {
         params: {
@@ -49,10 +72,6 @@ async function addNewRecipe(r) {
     return r;
 }
 
-async function searchByLimit(limit) {
-    return null;
-}
-
 async function getRandomRecipes(){
     let result = await axios.get(`${api_domain}/random`,
     {   
@@ -63,22 +82,6 @@ async function getRandomRecipes(){
         }
     });
     return result.data["recipes"];
-}
-
-async function searchByLimit(limit)
-{
-    return null;
-}
-
-function searchParamsValidation(params)
-{
-    return
-        params.query != undefined && 
-        params.query.length > 0 &&
-        [5, 10, 15].includes(params.limit) &&
-        params.cuisines.every(cuisine => constSearchValidationOptions.cuisine.includes(cuisine)) &&
-        params.diets.every(diet => constSearchValidationOptions.diet.includes(diet)) &&
-        params.intolerances.every(intolerance => constSearchValidationOptions.intolerance.includes(intolerance))
 }
 
 function boolIntConverter(value)
@@ -94,6 +97,8 @@ function boolIntConverter(value)
     }
 }
 
+exports.constSearchValidationOptions = constSearchValidationOptions;
 exports.getRecipeDetails = getRecipeDetails;
 exports.addNewRecipe = addNewRecipe;
 exports.getRandomRecipes = getRandomRecipes;
+exports.searchByLimit = searchByLimit;

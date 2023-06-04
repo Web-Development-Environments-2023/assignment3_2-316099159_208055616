@@ -316,7 +316,7 @@ paths:
           name: limit
           schema:
             type: number
-            description: "Integer. 5(default), 10, or 15. Used to specify the desired number of recipes."
+            description: "5 - 15 returned recipes"
             example: 10
             enum:
               - 5
@@ -356,7 +356,7 @@ paths:
                 - Spanish
                 - Thai
                 - Vietnamese
-          description: Enum to filter to specific cuisines or none (empty means none).
+          description: Filter to specific cuisines.
           example: [Indian, Italian]
         - in: header
           name: diets
@@ -376,7 +376,7 @@ paths:
                 - Primal
                 - Low FODMAP
                 - Whole30
-          description: Text to filter by dietary restrictions or none (empty means none).
+          description: Dairy/ Gluten free/ Vegan recipe.
           example: [Gluten Free, Vegan]
         - in: header
           name: intolerances
