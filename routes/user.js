@@ -104,6 +104,8 @@ router.get('/lastWatched', async (req, res, next) => {
     const lastWatched = await user_utils.getLastWatched(user_id);
     lastWatchedRecipesDetails = []
     for (let i = 0; i < lastWatched.length; i++) {
+      console.log(lastWatched[i])
+      console.log(`${process.env.api_domain}/${lastWatched[i]}/information`)
       const recipe_information = await axios.get(`${process.env.api_domain}/${lastWatched[i]}/information`,
       {
         params: {
