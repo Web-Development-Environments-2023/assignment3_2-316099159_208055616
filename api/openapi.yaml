@@ -1,10 +1,10 @@
 openapi: 3.0.3
 info:
-  title: Recepies API documentation
+  title: Recipes API documentation
   description: |-
-    This is an API for the recepies assignment. \
-    Two routes: Recepies and Users. \
-    Recepies route contains 5 endpoints. \
+    This is an API for the Recipes assignment. \
+    Two routes: Recipes and Users. \
+    Recipes route contains 5 endpoints. \
     Users route contains 7 endpoints.
   version: 1.0.1
 externalDocs:
@@ -13,15 +13,15 @@ externalDocs:
 servers:
 - url: /
 tags:
-- name: recepies
+- name: Recipes
   description: Everything about your Pets
 - name: users
   description: Operations about user
 paths:
-  /recepies:
+  /Recipes:
     post:
       tags:
-      - recepies
+      - Recipes
       summary: Create new recepie to the web
       description: Add a new recepie to the web
       operationId: addRecepie
@@ -41,11 +41,11 @@ paths:
                 $ref: '#/components/schemas/Recepie'
         "405":
           description: Invalid input
-      x-swagger-router-controller: Recepies
-  /recepies/{name}:
+      x-swagger-router-controller: Recipes
+  /Recipes/{name}:
     get:
       tags:
-      - recepies
+      - Recipes
       summary: Get recepie by name
       description: provide name of recepie then get recepie object
       operationId: findRecepieByName
@@ -76,15 +76,15 @@ paths:
                   $ref: '#/components/schemas/Recepie'
         "400":
           description: Invalid status value
-      x-swagger-router-controller: Recepies
-  /recepies/random:
+      x-swagger-router-controller: Recipes
+  /Recipes/random:
     get:
       tags:
-      - recepies
-      summary: Get 3 random recepies
-      description: "get 3 random recepies from all recepies in the server, without\
+      - Recipes
+      summary: Get 3 random Recipes
+      description: "get 3 random Recipes from all Recipes in the server, without\
         \ provide any parameter."
-      operationId: getThreeRandomRecepiesNoParametersNeeded
+      operationId: getThreeRandomRecipesNoParametersNeeded
       responses:
         "200":
           description: successful operation
@@ -102,19 +102,19 @@ paths:
                   $ref: '#/components/schemas/Recepie'
         "400":
           description: Invalid status value
-      x-swagger-router-controller: Recepies
-  /recepies/randomP:
+      x-swagger-router-controller: Recipes
+  /Recipes/randomP:
     get:
       tags:
-      - recepies
-      summary: "Get 3 random recepies, except the recepies specified in path."
-      description: "get 3 random recepies from all recepies in the server, without\
+      - Recipes
+      summary: "Get 3 random Recipes, except the Recipes specified in path."
+      description: "get 3 random Recipes from all Recipes in the server, without\
         \ provide any parameter."
-      operationId: getThreeRandomRecepiesWithParametersNeeded
+      operationId: getThreeRandomRecipesWithParametersNeeded
       parameters:
-      - name: arrayOfThreeCurrentDisplayedRecepies
+      - name: arrayOfThreeCurrentDisplayedRecipes
         in: query
-        description: array of three current displayed recepies
+        description: array of three current displayed Recipes
         required: true
         style: form
         explode: true
@@ -143,16 +143,16 @@ paths:
                   $ref: '#/components/schemas/Recepie'
         "400":
           description: Invalid status value
-      x-swagger-router-controller: Recepies
-  /recepies/Limit:
+      x-swagger-router-controller: Recipes
+  /Recipes/Limit:
     get:
       tags:
-      - recepies
-      summary: "Get X recepies, depends on users Limit attribute."
+      - Recipes
+      summary: "Get X Recipes, depends on users Limit attribute."
       description: "Each user have `Limit` attribute which can have the value of 5\
         \ or 10 or 15. Regarding the specific user, the server will retrive the amount\
-        \ of recepies."
-      operationId: getXrecepies
+        \ of Recipes."
+      operationId: getXRecipes
       parameters:
       - name: userId
         in: query
@@ -182,7 +182,7 @@ paths:
                   $ref: '#/components/schemas/Recepie'
         "400":
           description: Invalid status value
-      x-swagger-router-controller: Recepies
+      x-swagger-router-controller: Recipes
   /users:
     post:
       tags:
@@ -280,9 +280,9 @@ paths:
     get:
       tags:
       - users
-      summary: Get 3 last watched recepies
+      summary: Get 3 last watched Recipes
       description: ""
-      operationId: userLastWatchedRecepies
+      operationId: userLastWatchedRecipes
       parameters:
       - name: userId
         in: query
@@ -312,13 +312,13 @@ paths:
         "400":
           description: Invalid status value
       x-swagger-router-controller: Users
-  /users/myrecepies:
+  /users/myRecipes:
     get:
       tags:
       - users
-      summary: Get all the user's recepies
+      summary: Get all the user's Recipes
       description: ""
-      operationId: allUserRecepies
+      operationId: allUserRecipes
       parameters:
       - name: userId
         in: query
@@ -348,13 +348,13 @@ paths:
         "400":
           description: Invalid status value
       x-swagger-router-controller: Users
-  /users/myrecepies/favorites:
+  /users/myRecipes/favorites:
     get:
       tags:
       - users
       summary: Get all favorites
       description: ""
-      operationId: usersFavoriteRecepies
+      operationId: usersFavoriteRecipes
       parameters:
       - name: userId
         in: query
@@ -384,13 +384,13 @@ paths:
         "400":
           description: Invalid status value
       x-swagger-router-controller: Users
-  /users/myrecepies/family:
+  /users/myRecipes/family:
     get:
       tags:
       - users
-      summary: Get all my family recepies
+      summary: Get all my family Recipes
       description: ""
-      operationId: usersFamilyRecepies
+      operationId: usersFamilyRecipes
       parameters:
       - name: userId
         in: query
@@ -473,7 +473,7 @@ components:
           example: 95
         isViewed:
           type: boolean
-          description: Is recepies viewed by the user. Can be empty.
+          description: Is Recipes viewed by the user. Can be empty.
           example: false
         hasBeenSaved:
           type: boolean

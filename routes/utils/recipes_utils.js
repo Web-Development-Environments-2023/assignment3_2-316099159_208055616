@@ -110,6 +110,7 @@ async function validateRecipeIdExists(recipeId)
 
 async function validateRecipeIdExistsInApi(recipeId)
 {
+    try{
     const recipe = await axios.get(`${api_domain}/${recipeId}/information`, {
         params: {
             includeNutrition: false,
@@ -119,10 +120,18 @@ async function validateRecipeIdExistsInApi(recipeId)
     if (!recipe){
         return false;
     }
+    } catch (error) {
+        return false;
+    }
     return true;
 }
 
+const argumentsValidation = (req, res, next) => {
+    return (req != null && req.body != null && res != null && next != null);
+}
+
 exports.constSearchValidationOptions = constSearchValidationOptions;
+exports.argumentsValidation = argumentsValidation;
 exports.getRecipeDetails = getRecipeDetails;
 exports.addNewRecipe = addNewRecipe;
 exports.getRandomRecipes = getRandomRecipes;

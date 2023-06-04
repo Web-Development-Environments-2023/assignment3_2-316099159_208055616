@@ -5,7 +5,8 @@ const user_utils = require("./utils/user_utils");
 const recipe_utils = require("./utils/recipes_utils");
 
 /**
- * Authenticate all incoming requests by middleware
+ * AUTH - Authenticate all incoming requests by middleware
+ * 
  */
 router.use(async function (req, res, next) {
   if (req.session && req.session.user_id) {
@@ -24,7 +25,10 @@ router.use(async function (req, res, next) {
 
 
 /**
- * This path gets body with recipeId and save this recipe in the favorites list of the logged-in user
+ * PUT - This path gets body with recipeId and save this recipe in the favorites list of the logged-in user
+ * @param {String} recipeId - the id of the recipe to save as favorite
+ * @returns {String} - message that the recipe successfully saved as favorite
+ * @example http://localhost:3000/user/favorites
  */
 router.put('/favorites', async (req,res,next) => {
   try{
@@ -39,7 +43,9 @@ router.put('/favorites', async (req,res,next) => {
 
 
 /**
- * This path returns the favorites recipes that were saved by the logged-in user
+ * GET - This path returns the favorites recipes that were saved by the logged-in user
+ * @returns {JSON} - the favorites recipes that were saved by the logged-in user
+ * @example http://localhost:3000/user/favorites
  */
 router.get('/favorites', async (req,res,next) => {
   try{
@@ -61,7 +67,10 @@ router.get('/favorites', async (req,res,next) => {
 
 
 /**
- * This path gets body with recipeId and save this recipe in the lastWatched list of the logged-in user
+ * PUT - This path gets body with recipeId and save this recipe in the lastWatched list of the logged-in user
+ * @param {String} recipeId - the id of the recipe to save as lastWatched
+ * @returns {String} - message that the recipe successfully saved as lastWatched
+ * @example http://localhost:3000/user/lastWatched
  */
 router.put('/lastWatched', async (req, res, next) => {
   try {
@@ -76,7 +85,9 @@ router.put('/lastWatched', async (req, res, next) => {
 
 
 /**
- * This path returns the lastWatched recipes that were saved by the logged-in user
+ * GET - This path returns the lastWatched recipes that were saved by the logged-in user
+ * @returns {JSON} - the lastWatched recipes that were saved by the logged-in user
+ * @example http://localhost:3000/user/lastWatched
  */
 router.get('/lastWatched', async (req, res, next) => {
   try {
@@ -98,7 +109,10 @@ router.get('/lastWatched', async (req, res, next) => {
 
 
 /**
- * This path gets body with recipeId and save this recipe in the myRecipes list of the logged-in user
+ * PUT - This path gets body with recipeId and save this recipe in the myRecipes list of the logged-in user
+ * @param {String} recipeId - the id of the recipe to save as myRecipes
+ * @returns {String} - message that the recipe successfully saved as myRecipes
+ * @example http://localhost:3000/user/myRecipes
  */
 router.put('/myRecipes', async (req, res, next) => {
   try {
@@ -113,7 +127,9 @@ router.put('/myRecipes', async (req, res, next) => {
 
 
 /**
- * This path returns the myRecipes recipes that were saved by the logged-in user
+ * GET - This path returns the myRecipes recipes that were saved by the logged-in user
+ * @returns {JSON} - the myRecipes recipes that were saved by the logged-in user
+ * @example http://localhost:3000/user/myRecipes
  */
 router.get('/myRecipes', async (req, res, next) => {
   try {
@@ -135,7 +151,11 @@ router.get('/myRecipes', async (req, res, next) => {
 
 
 /**
- * This path updates the search limit for the logged-in user
+ * PUT - This path updates the search limit for the logged-in user
+ * @param {String} searchLimit - the new search limit
+ * @returns {String} - message that the search limit successfully updated
+ * @throws {Error} - if the search limit is not valid
+ * @example http://localhost:3000/user/searchLimit
  */
  router.put('/searchLimit', async (req, res, next) => {
   try {
@@ -150,7 +170,9 @@ router.get('/myRecipes', async (req, res, next) => {
 
 
 /**
- * This path returns the search limit of the logged-in user
+ * GET - This path returns the search limit of the logged-in user
+ * @returns {JSON} - the search limit of the logged-in user
+ * @example http://localhost:3000/user/searchLimit
  */
  router.get('/searchLimit', async (req, res, next) => {
   try {

@@ -9,6 +9,10 @@ const user_utils = require("./utils/user_utils");
  * @example http://localhost:3000/recipes/search
  */
 router.get("/search", async (req, res, next) => {
+  if (!argumentsValidation(req, res, next))
+  {
+    throw { status: 400, message: "Bad request" };
+  }
   if (req.session.username == undefined)
   {
     res.status(401).send("Unauthorized");
@@ -51,11 +55,15 @@ router.get("/search", async (req, res, next) => {
 });
 
 /**
- * GET 3 random recipes
+ * GET - 3 random recipes
  * @returns {JSON} - 3 random recipes
  * @example http://localhost:3000/recipes/random
  */
 router.get("/random", async (req, res, next) => {
+  if (!argumentsValidation(req, res, next))
+  {
+    throw { status: 400, message: "Bad request" };
+  }
   if (req.session.username == undefined)
   {
     res.status(401).send("Unauthorized");
@@ -78,12 +86,16 @@ router.get("/random", async (req, res, next) => {
 });
 
 /**
- * GET request to get recipe details
+ * GET - get recipe details
  * @param {int} recipeId - the id of the recipe
  * @returns {JSON} - the recipe details
  * @example http://localhost:3000/recipes/123/information
  */
 router.get("/:recipeId", async (req, res, next) => {
+  if (!argumentsValidation(req, res, next))
+  {
+    throw { status: 400, message: "Bad request" };
+  }
   if (req.params.recipeId == undefined)
   {
     res.status(400).send("Bad request");
@@ -102,12 +114,16 @@ router.get("/:recipeId", async (req, res, next) => {
 });
 
 /**
- * POST request to create a new recipe
+ * POST - create a new recipe
  * @param {JSON} recipe - the recipe to add
  * @returns {JSON} - the recipe that was added
  * @example http://localhost:3000/recipes/
  */
 router.post("/", async (req, res, next) => {
+  if (!argumentsValidation(req, res, next))
+  {
+    throw { status: 400, message: "Bad request" };
+  }
   try {
     if (req.body == undefined)
     {
