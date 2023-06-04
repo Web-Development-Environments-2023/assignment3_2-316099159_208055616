@@ -256,6 +256,8 @@ paths:
           description: Method not allowed
         "409":
           description: Asset already in DB
+        "500":
+          description: Internal server error 
   /recipes/{recipeId}:
     get:
       tags:
@@ -278,8 +280,12 @@ paths:
             application/json:
               schema:
                 $ref: "#/components/schemas/Recipe"
+        "400":
+          description: Invalid or missing parameters
         "404":
           description: recipeId is not exists
+        "500":
+          description: Internal server error
   /recipes/random:
     get:
       tags:
@@ -297,6 +303,8 @@ paths:
                   $ref: "#/components/schemas/Recipe"
         "400":
           description: Invalid or missing parameters
+        "401":
+          description: User is not authorized
         "404":
           description: No recipes found
         "500":
@@ -410,10 +418,16 @@ paths:
                 type: array
                 items:
                   $ref: "#/components/schemas/Recipe"
+        "204":
+          description: No content
         "400":
           description: Invalid or missing parameters
+        "401":
+          description: User is not authorized
         "404":
           description: No recipes found
+        "405":
+          description: Method not allowed
         "500":
           description: Internal server error
 components:
