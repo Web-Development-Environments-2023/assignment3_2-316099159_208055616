@@ -68,7 +68,7 @@ router.get("/random", async (req, res, next) => {
     const random_recipes = await recipes_utils.getRandomRecipes();
     if (random_recipes.length == 0)
     {
-      throw { status: 404, message: "Not found" };
+      throw { status: 401, message: "Problem occured" };
     }
     res.status(200).send(random_recipes);
   } catch (error) {

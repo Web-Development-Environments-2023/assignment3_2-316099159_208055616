@@ -299,12 +299,8 @@ paths:
                 type: array
                 items:
                   $ref: "#/components/schemas/Recipe"
-        "400":
-          description: Invalid or missing parameters
         "401":
           description: User is not authorized
-        "404":
-          description: No recipes found
         "500":
           description: Internal server error
   /recipes/search:
