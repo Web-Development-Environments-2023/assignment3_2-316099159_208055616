@@ -343,12 +343,12 @@ paths:
           schema:
             type: string
           description: The search string that will be used
-          example: Simple potatoes in the oven
+          example: Simple Macaroni and Cheese
         - in: header
           name: limit
           schema:
             type: number
-            description: "5 - 15 returned recipes"
+            description: "5 / 10 / 15 returned recipes"
             example: 10
             enum:
               - 5
