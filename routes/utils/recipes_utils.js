@@ -101,7 +101,7 @@ async function addNewRecipe(r) {
     await DButils.execQuery(
         `INSERT INTO recipes VALUES ('${id}', '${r.title}', '${r.image}', '${r.readyInMinutes}', '${r.popularity}', '${vegetarian}', '${vegan}', '${glutenFree}')`
     );
-    await user_utils.addToMyRecipes(req.session.user_id, id);
+    await user_utils.addToMyRecipes(user_id, id);
     return r;
 }
 
