@@ -3,6 +3,7 @@ var router = express.Router();
 const DButils = require("./utils/DButils");
 const user_utils = require("./utils/user_utils");
 const recipe_utils = require("./utils/recipes_utils");
+const { default: axios } = require("axios");
 
 /**
  * AUTH - Authenticate all incoming requests by middleware
@@ -103,7 +104,7 @@ router.get('/lastWatched', async (req, res, next) => {
     const lastWatched = await user_utils.getLastWatched(user_id);
     lastWatchedRecipesDetails = []
     for (let i = 0; i < lastWatched.length; i++) {
-      const result = await recipe_utils.getRecipeDetails(lastWatched[i]);
+      const result = await axios.get(`${process.env.api_domain}/${lastWatched[i]}`);
       lastWatchedRecipesDetails.push(result)
     }
     if (lastWatchedRecipesDetails.length === 0){
