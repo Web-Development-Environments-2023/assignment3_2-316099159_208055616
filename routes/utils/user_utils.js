@@ -1,4 +1,5 @@
 const DButils = require("./DButils");
+const recipes_utils = require("./utils/recipes_utils");
 
 /**
  * returns all object recipesData of the logged-in user
@@ -21,6 +22,9 @@ async function getFavoriteRecipes(user_id){
 
  // updates array of favorites recipes that were saved by the logged-in user
 async function markAsFavorite(user_id, recipe_id){
+    if (!recipes_utils.validateRecipeIdExists(recipe_id)){
+        throw { status: 404, message: `recipe_id ${recipe_id} not found` };
+    }
     const recipesData = await getUserRecipesData(user_id);
     if (recipesData.favorites.includes(recipe_id)) {
         throw { status: 409, message: `${recipe_id} already in ${user_id}'s favorites` };
@@ -39,6 +43,9 @@ async function getLastWatched(user_id) {
 
 // updates sorted by time array of last watched recipes that were saved by the logged-in user
 async function addToLastWatched(user_id, recipe_id) {
+    if (!recipes_utils.validateRecipeIdExists(recipe_id)){
+        throw { status: 404, message: `recipe_id ${recipe_id} not found` };
+    }
     const recipesData = await getUserRecipesData(user_id);
     if (recipesData.lastWatched.includes(recipe_id)) {
         throw { status: 409, message: `already in ${user_id}'s lastWatched` };
@@ -57,6 +64,9 @@ async function getMyRecipes(user_id) {
 
 // updates array of users recipes recipes that were saved by the logged-in user
 async function addToMyRecipes(user_id, recipe_id) {
+    if (!recipes_utils.validateRecipeIdExists(recipe_id)){
+        throw { status: 404, message: `recipe_id ${recipe_id} not found` };
+    }
     const recipesData = await getUserRecipesData(user_id);
     if (recipesData.myRecipes.includes(recipe_id)) {
         throw { status: 409, message: `${recipe_id} already in ${user_id}'s myRecipes` };
