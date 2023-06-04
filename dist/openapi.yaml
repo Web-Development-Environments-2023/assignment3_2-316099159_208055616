@@ -252,6 +252,8 @@ paths:
           description: Recipe added successfully
         "400":
           description: Bad request
+        "401":
+          description: User is not authorized
         "500":
           description: Internal server error
   /recipes/{recipeId}:
