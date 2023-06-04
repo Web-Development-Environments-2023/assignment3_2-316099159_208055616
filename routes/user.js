@@ -109,24 +109,6 @@ router.get('/lastWatched', async (req, res, next) => {
 
 
 /**
- * PUT - This path gets body with recipeId and save this recipe in the myRecipes list of the logged-in user
- * @param {String} recipeId - the id of the recipe to save as myRecipes
- * @returns {String} - message that the recipe successfully saved as myRecipes
- * @example http://localhost:3000/user/myRecipes
- */
-router.put('/myRecipes', async (req, res, next) => {
-  try {
-    const user_id = req.session.user_id;
-    const recipe_id = req.body.recipeId;
-    await user_utils.addToMyRecipes(user_id, recipe_id);
-    res.status(200).send("The Recipe successfully added to my recipes");
-  } catch (error) {
-    next(error);
-  }
-});
-
-
-/**
  * GET - This path returns the myRecipes recipes that were saved by the logged-in user
  * @returns {JSON} - the myRecipes recipes that were saved by the logged-in user
  * @example http://localhost:3000/user/myRecipes

@@ -191,34 +191,6 @@ paths:
           description: User is not authorized
       security:
         - cookieAuth: []
-    put:
-      tags:
-        - Users
-      summary: Add a recipe to the user's recipe list
-      description: Add a recipe to the recipe list of a user
-      requestBody:
-        content:
-          application/json:
-            schema:
-              type: object
-              properties:
-                recipeId:
-                  type: string
-                  description: Recipe's ID which the user wants to add to their recipe list
-                  example: 123
-      responses:
-        "200":
-          description: The recipe was successfully added to the user's recipe list
-        "400":
-          description: bad request
-        "401":
-          description: User is not authorized
-        "404":
-          description: recipe with id not found
-        "409":
-          description: Asset already in DB
-      security:
-        - cookieAuth: []
   /users/searchLimit:
     get:
       tags:
