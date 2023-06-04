@@ -112,8 +112,23 @@ async function getRandomRecipes(){
                 apiKey:process.env.spooncular_apiKey,
             }
         });
-    return result.data["recipes"];
-    } 
+        let recipes = [];
+        result.data.recipes.forEach((recipe) => {
+            let { id, title, readyInMinutes, image, aggregateLikes, vegan, vegetarian, glutenFree } = recipe;
+            recipes.push({
+                id: id,
+                title: title,
+                readyInMinutes: readyInMinutes,
+                image: image,
+                popularity: aggregateLikes,
+                vegan: vegan,
+                vegetarian: vegetarian,
+                glutenFree: glutenFree,
+            });
+        }
+        );
+        return recipes;
+    }
     catch (error) {
         throw { status: 500, message: "error in getRandomRecipes"};
     }
