@@ -1,5 +1,5 @@
 const DButils = require("./DButils");
-const recipes_utils = require("./utils/recipes_utils");
+const recipes_utils = require("./recipes_utils");
 
 /**
  * returns all object recipesData of the logged-in user
