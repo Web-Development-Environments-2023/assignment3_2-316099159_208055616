@@ -91,6 +91,8 @@ async function addNewRecipe(r) {
     {
         throw { status: 400, message: "recipe is null"};
     }
+    user_id = r.session.user_id;
+    r = r.body;
     let id = await generateNewId();
     vegan = boolIntConverter(r.vegan);
     vegetarian = boolIntConverter(r.vegetarian);
