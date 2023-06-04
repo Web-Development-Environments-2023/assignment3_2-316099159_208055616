@@ -3,7 +3,6 @@ var router = express.Router();
 const DButils = require("./utils/DButils");
 const user_utils = require("./utils/user_utils");
 const recipe_utils = require("./utils/recipes_utils");
-const { Int } = require("mssql");
 
 /**
  * AUTH - Authenticate all incoming requests by middleware
@@ -35,10 +34,11 @@ router.put('/favorites', async (req,res,next) => {
   try{
     const user_id = req.session.user_id;
     const recipe_id = req.body.recipeId;
-    if (typeof recipe_id !== 'string'){
-      throw { status: 400, message: `recipeId must be string numeric` };
+    if (typeof recipe_id !== 'number'){
+      throw { status: 400, message: `recipeId must be numeric` };
     }
-    await user_utils.markAsFavorite(user_id, recipe_id);
+    string_recipe_id = recipe_id.toString()
+    await user_utils.markAsFavorite(user_id, string_recipe_id);
     res.status(200).send("The Recipe successfully saved as favorite");
   } catch(error){
     next(error);
@@ -80,10 +80,11 @@ router.put('/lastWatched', async (req, res, next) => {
   try {
     const user_id = req.session.user_id;
     const recipe_id = req.body.recipeId;
-    if (typeof recipe_id !== 'string'){
-      throw { status: 400, message: `recipeId must be string numeric` };
+    if (typeof recipe_id !== 'number'){
+      throw { status: 400, message: `recipeId must be numeric` };
     }
-    await user_utils.addToLastWatched(user_id, recipe_id);
+    string_recipe_id = recipe_id.toString()
+    await user_utils.addToLastWatched(user_id, string_recipe_id);
     res.status(200).send("The Recipe successfully added to last watched");
   } catch (error) {
     next(error);
@@ -150,8 +151,8 @@ router.get('/myRecipes', async (req, res, next) => {
   try {
     const user_id = req.session.user_id;
     const searchLimit = req.body.searchLimit;
-    if (typeof searchLimit !== 'number'){
-      throw { status: 400, message: `searchLimit must be number` };
+    if (typeof searchLimit !== 'number' || ![5, 10, 15].includes(searchLimit)){
+      throw { status: 400, message: `searchLimit must be integer 5|10|15` };
     }
     await user_utils.updateSerachLimit(user_id, searchLimit);
     res.status(200).send("Search limit successfully updated");
