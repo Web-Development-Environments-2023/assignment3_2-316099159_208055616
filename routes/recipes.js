@@ -9,6 +9,14 @@ const user_utils = require("./utils/user_utils");
  * @example http://localhost:3000/recipes/search
  */
 router.get("/search", async (req, res, next) => {
+  if (req.session.username == undefined)
+  {
+    res.status(401).send("Unauthorized");
+  }
+  if (req.body == undefined)
+  {
+    res.status(400).send("Bad request");
+  }
   try {
     const params = {
       query: req.header('text').trim(),
@@ -34,7 +42,7 @@ router.get("/search", async (req, res, next) => {
     }
     else
     {
-      res.status(400).send("Bad request");
+      res.status(405).send("Forbidden");
     }
   } catch (error) {
     res.status(500).send("Internal server error, please make sure you are logged in");
