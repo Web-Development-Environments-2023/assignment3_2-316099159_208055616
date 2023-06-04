@@ -37,7 +37,7 @@ router.get("/search", async (req, res, next) => {
       res.status(400).send("Bad request");
     }
   } catch (error) {
-    res.status(500).send("Internal server error, please be sure you are logged in");
+    res.status(500).send("Internal server error, please make sure you are logged in");
     next(error);
   }
 });
@@ -48,10 +48,23 @@ router.get("/search", async (req, res, next) => {
  * @example http://localhost:3000/recipes/random
  */
 router.get("/random", async (req, res, next) => {
+  if (req.session.username == undefined)
+  {
+    res.status(401).send("Unauthorized");
+  }
+  if (req.body == undefined)
+  {
+    res.status(400).send("Bad request");
+  }
   try {
     const random_recipes = await recipes_utils.getRandomRecipes();
+    if (random_recipes.length == 0)
+    {
+      res.status(404).send("Not found");
+    }
     res.status(200).send(random_recipes);
   } catch (error) {
+    res.status(500).send("Internal server error, please make sure you are logged in");
     next(error);
   }
 });
@@ -63,10 +76,19 @@ router.get("/random", async (req, res, next) => {
  * @example http://localhost:3000/recipes/123/information
  */
 router.get("/:recipeId", async (req, res, next) => {
+  if (req.params.recipeId == undefined)
+  {
+    res.status(400).send("Bad request");
+  }
   try {
     const recipe = await recipes_utils.getRecipeDetails(req.params.recipeId);
+    if (recipe.length == 0)
+    {
+      res.status(404).send("Not found");
+    }
     res.status(200).send(recipe);
   } catch (error) {
+    res.status(500).send("Internal server error, please make sure you are logged in");
     next(error);
   }
 });
@@ -79,9 +101,18 @@ router.get("/:recipeId", async (req, res, next) => {
  */
 router.post("/", async (req, res, next) => {
   try {
+    if (req.body == undefined)
+    {
+      res.status(400).send("Bad request");
+    }
     const recipe = await recipes_utils.addNewRecipe(req.body);
+    if (recipe.length == 0)
+    {
+      res.status(403).send("Forbidden");
+    }
     res.status(201).send(recipe);
   } catch (error) {
+    res.status(405).send("Method not allowed");
     next(error);
   }
 });
