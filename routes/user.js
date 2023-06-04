@@ -45,8 +45,15 @@ router.get('/favorites', async (req,res,next) => {
   try{
     const user_id = req.session.user_id;
     const recipes_ids = await user_utils.getFavoriteRecipes(user_id);
-    const results = await recipe_utils.getRecipeDetails(recipes_ids);
-    res.status(200).send(results);
+    favoriteRecipesDetails = []
+    for (let i = 0; i < recipes_ids.length; i++) {
+      const result = await recipe_utils.getRecipeDetails(recipes_ids[i]);
+      favoriteRecipesDetails.push(result)
+    }
+    if (favoriteRecipesDetails.length === 0){
+      throw { status: 204, message: `no favorites` };
+    } 
+    res.status(200).send(favoriteRecipesDetails);
   } catch(error){
     next(error); 
   }
@@ -75,8 +82,15 @@ router.get('/lastWatched', async (req, res, next) => {
   try {
     const user_id = req.session.user_id;
     const lastWatched = await user_utils.getLastWatched(user_id);
-    const results = await recipe_utils.getRecipeDetails(lastWatched);
-    res.status(200).send(results);
+    lastWatchedRecipesDetails = []
+    for (let i = 0; i < lastWatched.length; i++) {
+      const result = await recipe_utils.getRecipeDetails(lastWatched[i]);
+      lastWatchedRecipesDetails.push(result)
+    }
+    if (lastWatchedRecipesDetails.length === 0){
+      throw { status: 204, message: `no lastWatched` };
+    } 
+    res.status(200).send(lastWatchedRecipesDetails);
   } catch (error) {
     next(error);
   }
@@ -105,8 +119,15 @@ router.get('/myRecipes', async (req, res, next) => {
   try {
     const user_id = req.session.user_id;
     const myRecipes = await user_utils.getMyRecipes(user_id);
-    const results = await recipe_utils.getRecipeDetails(myRecipes);
-    res.status(200).send(results);
+    myRecipesDetails = []
+    for (let i = 0; i < myRecipes.length; i++) {
+      const result = await recipe_utils.getRecipeDetails(myRecipes[i]);
+      myRecipesDetails.push(result)
+    }
+    if (myRecipesDetails.length === 0){
+      throw { status: 204, message: `no myRecipes` };
+    }
+    res.status(200).send(myRecipesDetails);
   } catch (error) {
     next(error);
   }

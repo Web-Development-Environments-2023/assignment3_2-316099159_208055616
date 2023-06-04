@@ -33,7 +33,7 @@ paths:
       responses:
         "201":
           description: A new user has been added
-        "400":
+        "409":
           description: wrong input parameters
   /login:
     post:
@@ -60,6 +60,8 @@ paths:
                 example: session=87s97sdhgf279293f8w0e9
         "401":
           description: Authentication failed
+        "403":
+          description: User already connected
   /logout:
     post:
       tags:
@@ -68,6 +70,8 @@ paths:
       responses:
         "200":
           description: "the user has ben successfully logged out"
+        "403":
+          description: "no logged in user"
   /users/favorites:
     get:
       tags:
@@ -83,6 +87,8 @@ paths:
                 type: array
                 items:
                   $ref: "#/components/schemas/Recipe"
+        "204":
+          description: no items in user's favorites
         "401":
           description: user is not authorized
       security:
@@ -101,12 +107,14 @@ paths:
                 reciepeId:
                   type: string
                   description: reciepe's id which the user saved
-                  example: 716429
+                  example: 123
       responses:
         "200":
           description: The Recipe successfully saved as favorite
         "401":
           description: user is not authorized
+        "404":
+          description: recepie with id not found
         "409":
           description: Asset already in DB
       security:
@@ -126,6 +134,8 @@ paths:
                 type: array
                 items:
                   $ref: "#/components/schemas/RecipePreview"
+        "204":
+          description: no items in user's lastWatched
         "401":
           description: User is not authorized
       security:
@@ -144,12 +154,14 @@ paths:
                 recipeId:
                   type: string
                   description: Recipe's ID which the user wants to add to the last watched list
-                  example: 716429
+                  example: 123
       responses:
         "200":
           description: The recipe was successfully added to the last watched list
         "401":
           description: User is not authorized
+        "404":
+          description: recepie with id not found
         "409":
           description: Asset already in DB
       security:
@@ -169,6 +181,8 @@ paths:
                 type: array
                 items:
                   $ref: "#/components/schemas/RecipePreview"
+        "204":
+          description: no items in user's myRecipes
         "401":
           description: User is not authorized
       security:
@@ -187,12 +201,14 @@ paths:
                 recipeId:
                   type: string
                   description: Recipe's ID which the user wants to add to their recipe list
-                  example: 716429
+                  example: 123
       responses:
         "200":
           description: The recipe was successfully added to the user's recipe list
         "401":
           description: User is not authorized
+        "404":
+          description: recepie with id not found
         "409":
           description: Asset already in DB
       security:
@@ -257,7 +273,7 @@ paths:
         "409":
           description: Asset already in DB
         "500":
-          description: Internal server error 
+          description: Internal server error
   /recipes/{recipeId}:
     get:
       tags:
