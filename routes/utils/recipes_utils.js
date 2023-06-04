@@ -71,6 +71,10 @@ async function getRecipeDetails(recipe_id) {
         {
             throw { status: 400, message: "recipe_id is null"};
         }
+        if (recipe_id <= 0)
+        {
+            throw { status: 400, message: "recipe_id is not valid"};
+        }
         console.log("recipe_id: " + recipe_id);
         let recipe_info = await getRecipeInformation(recipe_id);
         let { id, title, readyInMinutes, image, aggregateLikes, vegan, vegetarian, glutenFree } = recipe_info.data;
