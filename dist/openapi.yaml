@@ -104,7 +104,7 @@ paths:
             schema:
               type: object
               properties:
-                reciepeId:
+                recipeId:
                   type: string
                   description: reciepe's id which the user saved
                   example: 123
