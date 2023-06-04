@@ -111,6 +111,8 @@ paths:
       responses:
         "200":
           description: The Recipe successfully saved as favorite
+        "400":
+          description: bad request
         "401":
           description: user is not authorized
         "404":
@@ -158,6 +160,8 @@ paths:
       responses:
         "200":
           description: The recipe was successfully added to the last watched list
+        "400":
+          description: bad request
         "401":
           description: User is not authorized
         "404":
@@ -205,6 +209,8 @@ paths:
       responses:
         "200":
           description: The recipe was successfully added to the user's recipe list
+        "400":
+          description: bad request
         "401":
           description: User is not authorized
         "404":
