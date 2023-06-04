@@ -259,6 +259,8 @@ paths:
       responses:
         "200":
           description: The searchLimit was changed successfully on the user's
+        "400":
+          description: bad request
         "401":
           description: User is not authorized
       security:

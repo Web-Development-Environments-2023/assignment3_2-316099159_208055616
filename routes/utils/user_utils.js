@@ -119,8 +119,8 @@ async function updateSerachLimit(user_id, userSerachLimit) {
     if (user_id === undefined || user_id === null){
         throw { status: 400, message: `user_id is undefined or null` };
     }
-    if (typeof(userSerachLimit) !==  Number){
-        throw { status: 401, message: `userSerachLimit is undefined or null` };
+    if (typeof(userSerachLimit) !== typeof(Number)){
+        throw { status: 400, message: `userSerachLimit is not a number` };
     }
     await DButils.execQuery(`UPDATE users SET searchLimit='${userSerachLimit}' WHERE username='${user_id}'`);
 }
