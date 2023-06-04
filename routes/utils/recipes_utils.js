@@ -110,6 +110,7 @@ async function validateRecipeIdExistsInDB(recipeId)
 
 async function validateRecipeIdExistsInApi(recipeId)
 {
+    try{
     const recipe = await axios.get(`${api_domain}/${recipeId}/information`, {
         params: {
             includeNutrition: false,
@@ -117,6 +118,9 @@ async function validateRecipeIdExistsInApi(recipeId)
         }
     });
     if (!recipe){
+        return false;
+    }
+    } catch (error) {
         return false;
     }
     return true;
