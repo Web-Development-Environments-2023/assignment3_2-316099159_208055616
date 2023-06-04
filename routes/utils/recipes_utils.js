@@ -92,6 +92,10 @@ async function addNewRecipe(r) {
         throw { status: 400, message: "recipe is null"};
     }
     user_id = r.session.user_id;
+    if (user_id == undefined || user_id == null)
+    {
+        throw { status: 401, message: "user is unauthorized"};
+    }
     r = r.body;
     let id = await generateNewId();
     vegan = boolIntConverter(r.vegan);
