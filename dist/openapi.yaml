@@ -116,7 +116,7 @@ paths:
         "401":
           description: user is not authorized
         "404":
-          description: recepie with id not found
+          description: recipe with id not found
         "409":
           description: Asset already in DB
       security:
@@ -165,7 +165,7 @@ paths:
         "401":
           description: User is not authorized
         "404":
-          description: recepie with id not found
+          description: recipe with id not found
         "409":
           description: Asset already in DB
       security:
@@ -214,7 +214,7 @@ paths:
         "401":
           description: User is not authorized
         "404":
-          description: recepie with id not found
+          description: recipe with id not found
         "409":
           description: Asset already in DB
       security:
