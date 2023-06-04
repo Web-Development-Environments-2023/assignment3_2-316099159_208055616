@@ -34,8 +34,21 @@ const constSearchValidationOptions = {
               addRecipeInformation: true,
           }
       });
-
-      return result.data["results"];
+      let recipes = [];
+        result.data.results.forEach((recipe) => {
+            let { id, title, readyInMinutes, image, aggregateLikes, vegan, vegetarian, glutenFree } = recipe;
+            recipes.push({
+                id: id,
+                title: title,
+                readyInMinutes: readyInMinutes,
+                image: image,
+                popularity: aggregateLikes,
+                vegan: vegan,
+                vegetarian: vegetarian,
+                glutenFree: glutenFree,
+            });
+        });
+        return recipes;
   }
 
 async function getRecipeInformation(recipe_id) {
