@@ -126,7 +126,12 @@ async function validateRecipeIdExistsInApi(recipeId)
     return true;
 }
 
+const argumentsValidation = (req, res, next) => {
+    return (req != null && req.body != null && res != null && next != null);
+}
+
 exports.constSearchValidationOptions = constSearchValidationOptions;
+exports.argumentsValidation = argumentsValidation;
 exports.getRecipeDetails = getRecipeDetails;
 exports.addNewRecipe = addNewRecipe;
 exports.getRandomRecipes = getRandomRecipes;
