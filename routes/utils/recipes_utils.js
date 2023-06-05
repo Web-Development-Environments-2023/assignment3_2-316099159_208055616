@@ -45,7 +45,7 @@ async function getRandomRecipes(){
 }
 
 async function searchByLimit(params){
-    if (params.cuisine != '') {params.cuisines = params.cuisines.join(",");}
+    if (params.cuisines != '') {params.cuisines = params.cuisines.join(",");}
     else {params.cuisines = '';}
     if (params.diets != '') {params.diets = params.diets.join(",");}
     else {params.diets = '';}
