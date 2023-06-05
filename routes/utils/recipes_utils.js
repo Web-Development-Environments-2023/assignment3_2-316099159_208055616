@@ -10,10 +10,6 @@ async function addNewRecipe(req) {
     {
         throw { status: 401, message: "user is unauthorized"};
     }
-    if  (!validator.validateRecipeArgumentAreValid(req))
-    {
-        throw { status: 400, message: "one or more of the arguments are invalid"};
-    }
     req = req.body;
     const recipe_id = await generateNewId();
     const vegan = boolIntConverter(req.vegan);
