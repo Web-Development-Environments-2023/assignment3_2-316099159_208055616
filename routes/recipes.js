@@ -106,11 +106,11 @@ router.post("/", async (req, res, next) => {
   {
     throw { status: 400, message: "Bad request" };
   }
-  if (!validator.validateRecipeArgumentAreValid(req.body))
-  {
-    throw { status: 400, message: "Bad request" };
-  }
   try {
+    if (!validator.validateRecipeArgumentAreValid(req.body))
+    {
+      throw { status: 400, message: "Bad request" };
+    }
     const recipe = await recipes_utils.addNewRecipe(req);
     res.status(201).send(recipe);
   } catch (error) {

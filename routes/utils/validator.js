@@ -39,10 +39,11 @@ const argumentsValidation = (req, res, next) => {
     try{
         return (req != null && 
             req != undefined && 
-            req.body != null && 
             res != null && 
             next != null && 
-            req.body != undefined);
+            req.body != null && 
+            req.body != undefined &&
+            req.body.length != 0);
     }
     catch (error){
         return false
@@ -106,7 +107,7 @@ async function validateRecipeIdExistsInDB(recipe_id)
     return false
 }
 
-async function validateRecipeArgumentAreValid(params){
+function validateRecipeArgumentAreValid(params){
     if (params == null || params == undefined || params.length != 6){
         return false
     }
