@@ -315,7 +315,7 @@ paths:
           schema:
             type: string
           description: The search string that will be used
-          example: Simple Macaroni and Cheese
+          example: Thai
         - in: header
           name: limit
           schema:
@@ -361,7 +361,7 @@ paths:
                 - Thai
                 - Vietnamese
           description: Filter to specific cuisines.
-          example: [Indian, Italian]
+          example: [Indian, Thai]
         - in: header
           name: diets
           schema:
