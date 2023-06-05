@@ -31,6 +31,32 @@ To run the Recipe API locally, follow these steps:
 
    The API will be accessible at `http://localhost:3000`.
 
+## DB creation
+```
+CREATE TABLE recepieApp.recipes
+ (
+  id VARCHAR(255) PRIMARY KEY,
+  title VARCHAR(255),
+  image VARCHAR(255),   
+  readyInMinutes INT,
+  popularity INT,
+  vegetarian BOOLEAN,
+  vegan BOOLEAN,
+  glutenFree BOOLEAN
+);
+
+CREATE TABLE recepieApp.users (
+  userName VARCHAR(255) PRIMARY KEY,
+  firstName VARCHAR(255),
+  lastName VARCHAR(255),
+  country VARCHAR(255),
+  password VARCHAR(255),
+  email VARCHAR(255),
+  searchLimit INT,
+  recepiesData JSON
+);
+```
+
 ## API Endpoints
 
 ### Search Recipes
