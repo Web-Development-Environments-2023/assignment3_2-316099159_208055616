@@ -106,6 +106,31 @@ async function validateRecipeIdExistsInDB(recipe_id)
     return false
 }
 
+async function validateRecipeArgumentAreValid(params){
+    if (params == null || params == undefined || params.length != 6){
+        return false
+    }
+    if (params.title == null || params.title == undefined || params.title.length == 0){
+        return false
+    }
+    if (params.image == null || params.image == undefined || params.image.length == 0){
+        return false
+    }
+    if (params.readyInMinutes == null || params.readyInMinutes == undefined || params.readyInMinutes < 0){
+        return false
+    }
+    if (params.vegetarian == null || params.vegetarian == undefined){
+        return false
+    }
+    if (params.vegan == null || params.vegan == undefined){
+        return false
+    }
+    if (params.glutenFree == null || params.glutenFree == undefined){
+        return false
+    }
+}
+
+exports.validateRecipeArgumentAreValid = validateRecipeArgumentAreValid
 exports.validateSearchLimit = validateSearchLimit
 exports.validateParamsForSearch = validateParamsForSearch
 exports.validateUserLogedIn = validateUserLogedIn
