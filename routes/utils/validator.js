@@ -108,7 +108,7 @@ async function validateRecipeIdExistsInDB(recipe_id)
 }
 
 function validateRecipeArgumentAreValid(params){
-    if (params == null || params == undefined || params.length != 6){
+    if (params == null || params == undefined){
         return false
     }
     if (params.title == null || params.title == undefined || params.title.length == 0){
@@ -129,6 +129,7 @@ function validateRecipeArgumentAreValid(params){
     if (params.glutenFree == null || params.glutenFree == undefined){
         return false
     }
+    return true
 }
 
 exports.validateRecipeArgumentAreValid = validateRecipeArgumentAreValid
