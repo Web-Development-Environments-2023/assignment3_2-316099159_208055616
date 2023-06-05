@@ -25,12 +25,27 @@ function validateParamsForSearch(params){
         params != undefined &&
         params.query != undefined &&
         params.query.length > 0 &&
-        [5, 10, 15].includes(params.limit) &&
-        params.cuisines.every(cuisine => constSearchValidationOptions.cuisine.includes(cuisine)) &&
-        params.diets.every(diet => constSearchValidationOptions.diet.includes(diet)) &&
-        params.intolerances.every(intolerance => constSearchValidationOptions.intolerance.includes(intolerance))
+        [5, 10, 15].includes(params.limit)
     ){
         return true
+    }
+    if (params.cuisines != '')
+    {   
+        if (!params.cuisines.every(cuisine => constSearchValidationOptions.cuisine.includes(cuisine))){
+            return false
+        }
+    }
+    if (params.diets != '')
+    {   
+        if (!params.diets.every(diet => constSearchValidationOptions.diet.includes(diet))){
+            return false
+        }
+    }
+    if (params.intolerances != '')
+    {
+        if (!params.intolerances.every(intolerance => constSearchValidationOptions.intolerance.includes(intolerance))){
+            return false
+        }
     }
     return false
 }

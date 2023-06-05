@@ -45,9 +45,12 @@ async function getRandomRecipes(){
 }
 
 async function searchByLimit(params){
-    params.cuisines = params.cuisines.join(",");
-    params.diets = params.diets.join(",");
-    params.intolerances = params.intolerances.join(",");
+    if (params.cuisine != '') {params.cuisines = params.cuisines.join(",");}
+    else {params.cuisines = '';}
+    if (params.diets != '') {params.diets = params.diets.join(",");}
+    else {params.diets = '';}
+    if (params.intolerances != '') {params.intolerances = params.intolerances.join(",");}
+    else {params.intolerances = '';}    
     const rawRecipes = await axios.get(`${api_domain}/complexSearch`,
     {
         params:

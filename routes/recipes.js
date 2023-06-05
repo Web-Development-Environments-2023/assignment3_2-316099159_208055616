@@ -17,11 +17,11 @@ router.get("/search", async (req, res, next) => {
     const params = {
       query: req.header('text'), //.trim(),
       limit: await user_utils.getSearchLimit(req.session.user_id), //| 5,
-      cuisines: req.header('cuisines') != undefined ? req.header('cuisines').split(',') : [],
-      diets: req.header('diets') != undefined ? req.header('diets').split(',') : [],
-      intolerances: req.header('intolerances') != undefined ? req.header('intolerances').split(',') : [], 
+      cuisines: (req.header('cuisines') != undefined && req.header('cuisines') != '') ? req.header('cuisines').split(',') : '',
+      diets: (req.header('diets') != undefined && req.header('diets') != '') ? req.header('diets').split(',') : '',
+      intolerances: (req.header('intolerances') != undefined && req.header('intolerances') !='') ? req.header('intolerances').split(',') : '', 
     };
-    console.log("The params are: \n" + params);
+    console.log({...params});
     if (!validator.validateParamsForSearch(params)){
       throw { status: 400, message: "Bad request" };
     }
