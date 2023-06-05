@@ -10,13 +10,17 @@ async function addNewRecipe(req) {
     {
         throw { status: 401, message: "user is unauthorized"};
     }
+    if  (!validator.validateRecipeArgumentAreValid(req))
+    {
+        throw { status: 400, message: "one or more of the arguments are invalid"};
+    }
     req = req.body;
     const recipe_id = await generateNewId();
     const vegan = boolIntConverter(req.vegan);
     const vegetarian = boolIntConverter(req.vegetarian);
     const glutenFree = boolIntConverter(req.glutenFree);
     await DButils.execQuery(
-        `INSERT INTO recipes VALUES ('${recipe_id}', '${req.title}', '${req.image}', '${req.readyInMinutes}', '${0}', '${vegetarian}', '${vegan}', '${glutenFree}')`
+        `INSERT INTO recipes VALUES ('${recipe_id}', '${req.title}', '${req.image}', '${req.readyInMinutes}', '${parseInt(0)}', '${vegetarian}', '${vegan}', '${glutenFree}')`
     );
     await user_utils.addToMyRecipes(user_id, recipe_id);
     return req;
