@@ -112,22 +112,25 @@ function validateRecipeArgumentAreValid(params){
         if (params == null || params == undefined){
             return false
         }
-        if (params.title == null || params.title == undefined || params.title.length == 0){
+        if (params.title == null || params.title == undefined || 
+            params.title.length == 0 || typeof params.title != 'string'){
             return false
         }
-        if (params.image == null || params.image == undefined || params.image.length == 0){
+        if (params.image == null || params.image == undefined || 
+            params.image.length == 0 || typeof params.image != 'string'){
             return false
         }
-        if (params.readyInMinutes == null || params.readyInMinutes == undefined || params.readyInMinutes < 0){
+        if (params.readyInMinutes == null || params.readyInMinutes == undefined || 
+            params.readyInMinutes < 0 || typeof params.readyInMinutes != 'number'){
             return false
         }
-        if (params.vegetarian == null || params.vegetarian == undefined){
+        if (params.vegetarian == null || params.vegetarian == undefined || typeof params.vegetarian != 'boolean'){
             return false
         }
-        if (params.vegan == null || params.vegan == undefined){
+        if (params.vegan == null || params.vegan == undefined || typeof params.vegan != 'boolean'){
             return false
         }
-        if (params.glutenFree == null || params.glutenFree == undefined){
+        if (params.glutenFree == null || params.glutenFree == undefined || typeof params.glutenFree != 'boolean'){
             return false
         }
         return true
