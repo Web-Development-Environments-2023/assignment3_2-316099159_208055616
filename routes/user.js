@@ -3,7 +3,8 @@ var router = express.Router();
 const DButils = require("./utils/DButils");
 const user_utils = require("./utils/user_utils");
 const recipe_utils = require("./utils/recipes_utils");
-const { default: axios } = require("axios");
+const validator = require("./utils/validator");
+
 
 /**
  * AUTH - Authenticate all incoming requests by middleware
@@ -35,11 +36,7 @@ router.put('/favorites', async (req,res,next) => {
   try{
     const user_id = req.session.user_id;
     const recipe_id = req.body.recipeId;
-    if (typeof recipe_id !== 'number'){
-      throw { status: 400, message: `recipeId must be numeric` };
-    }
-    string_recipe_id = recipe_id.toString()
-    await user_utils.markAsFavorite(user_id, string_recipe_id);
+    await user_utils.markAsFavorite(user_id, recipe_id);
     res.status(200).send("The Recipe successfully saved as favorite");
   } catch(error){
     next(error);
@@ -55,12 +52,7 @@ router.put('/favorites', async (req,res,next) => {
 router.get('/favorites', async (req,res,next) => {
   try{
     const user_id = req.session.user_id;
-    const recipes_ids = await user_utils.getFavoriteRecipes(user_id);
-    favoriteRecipesDetails = []
-    for (let i = 0; i < recipes_ids.length; i++) {
-      const recipe_information = await recipe_utils.getRecipeFromDB(recipes_ids[i]);
-      favoriteRecipesDetails.push(recipe_information)
-    }
+    const favoriteRecipesDetails = await user_utils.getFavoriteRecipes(user_id);
     if (favoriteRecipesDetails.length === 0){
       throw { status: 204, message: `no favorites` };
     } 
@@ -81,11 +73,7 @@ router.put('/lastWatched', async (req, res, next) => {
   try {
     const user_id = req.session.user_id;
     const recipe_id = req.body.recipeId;
-    if (typeof recipe_id !== 'number'){
-      throw { status: 400, message: `recipeId must be numeric` };
-    }
-    string_recipe_id = recipe_id.toString()
-    await user_utils.addToLastWatched(user_id, string_recipe_id);
+    await user_utils.addToLastWatched(user_id, recipe_id);
     res.status(200).send("The Recipe successfully added to last watched");
   } catch (error) {
     next(error);
@@ -101,19 +89,11 @@ router.put('/lastWatched', async (req, res, next) => {
 router.get('/lastWatched', async (req, res, next) => {
   try {
     const user_id = req.session.user_id;
-    const lastWatched = await user_utils.getLastWatched(user_id);
-    lastWatchedRecipesDetails = []
-    for (let i = 0; i < lastWatched.length; i++) {
-      let recipe_information = await recipe_utils.getRecipeFromDB(lastWatched[i]);
-      if (recipe_information === undefined || recipe_information === null || recipe_information.length === 0){
-        recipe_information = await recipe_utils.getRecipeDetails(lastWatched[i])
-      }
-      lastWatchedRecipesDetails.push(recipe_information)
-    }
-    if (lastWatchedRecipesDetails.length === 0){
+    const lastWatchedDetails = await user_utils.getLastWatched(user_id);
+    if (lastWatchedDetails.length === 0){
       throw { status: 204, message: `no lastWatched` };
     } 
-    res.status(200).send(lastWatchedRecipesDetails);
+    res.status(200).send(lastWatchedDetails);
   } catch (error) {
     next(error);
   }
@@ -128,15 +108,10 @@ router.get('/lastWatched', async (req, res, next) => {
 router.get('/myRecipes', async (req, res, next) => {
   try {
     const user_id = req.session.user_id;
-    const myRecipes = await user_utils.getMyRecipes(user_id);
-    myRecipesDetails = []
-    for (let i = 0; i < myRecipes.length; i++) {
-      const recipe_information = await recipe_utils.getRecipeFromDB(myRecipes[i]);
-      myRecipesDetails.push(recipe_information)
-    }
+    const myRecipesDetails = await user_utils.getMyRecipes(user_id);
     if (myRecipesDetails.length === 0){
       throw { status: 204, message: `no myRecipes` };
-    }
+    } 
     res.status(200).send(myRecipesDetails);
   } catch (error) {
     next(error);
@@ -155,9 +130,6 @@ router.get('/myRecipes', async (req, res, next) => {
   try {
     const user_id = req.session.user_id;
     const searchLimit = req.body.searchLimit;
-    if (typeof searchLimit !== 'number' || ![5, 10, 15].includes(searchLimit)){
-      throw { status: 400, message: `searchLimit must be int 5|10|15` };
-    }
     await user_utils.updateSerachLimit(user_id, searchLimit);
     res.status(200).send("Search limit successfully updated");
   } catch (error) {

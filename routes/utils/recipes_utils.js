@@ -1,126 +1,30 @@
 const axios = require("axios");
 const DButils = require("./DButils");
 const user_utils = require("./user_utils");
-const { parse } = require("path");
+const validator = require("./validator");
 const api_domain = "https://api.spoonacular.com/recipes";
 
-const constSearchValidationOptions = {
-    cuisine: ["African", "Asian", "American", "British", "Cajun", "Caribbean", "Chinese", "Eastern European", "European", 
-    "French", "German", "Greek", "Indian", "Irish", "Italian", "Japanese", "Jewish", "Korean", "Latin American", "Mediterranean", 
-    "Mexican", "Middle Eastern", "Nordic", "Southern", "Spanish", "Thai", "Vietnamese"],
-    diet: ["Gluten Free", "Ketogenic", "Vegetarian", "Lacto-Vegetarian", "Ovo-Vegetarian", "Vegan", "Pescetarian", "Paleo", 
-    "Primal", "Low FODMAP", "Whole30"],
-    intolerance: ["Dairy", "Egg", "Gluten", "Grain", "Peanut", "Seafood", "Sesame", "Shellfish", "Soy", "Sulfite", "Tree Nut", "Wheat"]
-  };
-
-  async function searchByLimit(params)
-  {
-    if (params == undefined || params == null)
-    {
-        throw { status: 400, message: "params is null"};
-    }
-      params.cuisines = params.cuisines.join(",");
-      params.diets = params.diets.join(",");
-      params.intolerances = params.intolerances.join(",");
-  
-      let result = await axios.get(`${api_domain}/complexSearch`,
-      {
-          params:
-          {
-              query: params.query,
-              cuisine: params.cuisines,
-              diet: params.diets,
-              intolerances: params.intolerances,
-              number: params.limit,
-              apiKey:process.env.spooncular_apiKey,
-              addRecipeInformation: true,
-          }
-      });
-      let recipes = [];
-        result.data.results.forEach((recipe) => {
-            let { id, title, readyInMinutes, image, aggregateLikes, vegan, vegetarian, glutenFree } = recipe;
-            recipes.push({
-                id: id,
-                title: title,
-                readyInMinutes: readyInMinutes,
-                image: image,
-                popularity: aggregateLikes,
-                vegan: vegan,
-                vegetarian: vegetarian,
-                glutenFree: glutenFree,
-            });
-        });
-        return recipes;
-  }
-
-async function getRecipeInformation(recipe_id) {
-    if (recipe_id == undefined || recipe_id == null)
-    {
-        throw { status: 400, message: "recipe_id is null"};
-    }
-    return await axios.get(`${api_domain}/${recipe_id}/information`, {
-        params: {
-            includeNutrition: false,
-            apiKey: process.env.spooncular_apiKey
-        }
-    });
-}
-
-async function getRecipeDetails(recipe_id) {
-    try{
-        if (recipe_id == undefined || recipe_id == null)
-        {
-            throw { status: 400, message: "recipe_id is null"};
-        }
-        if (recipe_id === "0" || parseInt(recipe_id) === 0 || parseInt(recipe_id) < 0)
-        {
-            throw { status: 400, message: "recipe_id is not valid"};
-        }
-        console.log("recipe_id: " + recipe_id);
-        let recipe_info = await getRecipeInformation(recipe_id);
-        let { id, title, readyInMinutes, image, aggregateLikes, vegan, vegetarian, glutenFree } = recipe_info.data;
-        return {
-            id: id,
-            title: title,
-            readyInMinutes: readyInMinutes,
-            image: image,
-            popularity: aggregateLikes,
-            vegan: vegan,
-            vegetarian: vegetarian,
-            glutenFree: glutenFree,
-        }
-    }
-    catch (error) {
-        throw error;
-    }
-}
-
-async function addNewRecipe(r) {
-    if (r == undefined || r == null)
-    {
-        throw { status: 400, message: "recipe is null"};
-    }
-    user_id = r.session.user_id;
-    if (user_id == undefined || user_id == null)
+async function addNewRecipe(req) {
+    user_id = req.session.user_id;
+    if (!validator.validateUserLogedIn(user_id))
     {
         throw { status: 401, message: "user is unauthorized"};
     }
-    r = r.body;
-    let id = await generateNewId();
-    vegan = boolIntConverter(r.vegan);
-    vegetarian = boolIntConverter(r.vegetarian);
-    glutenFree = boolIntConverter(r.glutenFree);
-    console.log("addNewRecipe");
+    req = req.body;
+    const recipe_id = await generateNewId();
+    const vegan = boolIntConverter(req.vegan);
+    const vegetarian = boolIntConverter(req.vegetarian);
+    const glutenFree = boolIntConverter(req.glutenFree);
     await DButils.execQuery(
-        `INSERT INTO recipes VALUES ('${id}', '${r.title}', '${r.image}', '${r.readyInMinutes}', '${r.popularity}', '${vegetarian}', '${vegan}', '${glutenFree}')`
+        `INSERT INTO recipes VALUES ('${recipe_id}', '${req.title}', '${req.image}', '${req.readyInMinutes}', '${req.popularity}', '${vegetarian}', '${vegan}', '${glutenFree}')`
     );
-    await user_utils.addToMyRecipes(user_id, id);
-    return r;
+    await user_utils.addToMyRecipes(user_id, recipe_id);
+    return req;
 }
 
 async function getRandomRecipes(){
     try{
-        let result = await axios.get(`${api_domain}/random`,
+        const rawRandomRecipes = await axios.get(`${api_domain}/random`,
         {   
             params:
             {
@@ -128,21 +32,11 @@ async function getRandomRecipes(){
                 apiKey:process.env.spooncular_apiKey,
             }
         });
-        let recipes = [];
-        result.data.recipes.forEach((recipe) => {
-            let { id, title, readyInMinutes, image, aggregateLikes, vegan, vegetarian, glutenFree } = recipe;
-            recipes.push({
-                id: id,
-                title: title,
-                readyInMinutes: readyInMinutes,
-                image: image,
-                popularity: aggregateLikes,
-                vegan: vegan,
-                vegetarian: vegetarian,
-                glutenFree: glutenFree,
-            });
-        }
-        );
+        const recipes = [];
+        rawRandomRecipes.data.recipes.forEach((recipe_info) => {
+            schemedRecipe = transformRecipeByScheme(recipe_info)
+            recipes.push(schemedRecipe) 
+        });
         return recipes;
     }
     catch (error) {
@@ -150,13 +44,29 @@ async function getRandomRecipes(){
     }
 }
 
-function getRecipeFromDB(recipe_id) {
-    if (recipe_id == undefined || recipe_id == null)
+async function searchByLimit(params){
+    params.cuisines = params.cuisines.join(",");
+    params.diets = params.diets.join(",");
+    params.intolerances = params.intolerances.join(",");
+    const rawRecipes = await axios.get(`${api_domain}/complexSearch`,
     {
-        throw { status: 400, message: "recipe_id is null"};
-    }
-    let [value] = DButils.execQuery(`SELECT * FROM recipes WHERE id = '${recipe_id}'`);
-    return value;
+        params:
+        {
+            query: params.query,
+            cuisine: params.cuisines,
+            diet: params.diets,
+            intolerances: params.intolerances,
+            number: params.limit,
+            apiKey:process.env.spooncular_apiKey,
+            addRecipeInformation: true,
+        }
+    });
+    const recipes = [];
+    rawRecipes.data.results.forEach((recipe) => {
+        const schemedRecipe = transformRecipeByScheme(recipe)
+        recipes.push(schemedRecipe);
+    });
+    return recipes;
 }
 
 function boolIntConverter(value)
@@ -172,46 +82,6 @@ function boolIntConverter(value)
     }
 }
 
-async function validateRecipeIdExists(recipeId)
-{
-    if (recipeId == undefined || recipeId == null)
-    {
-        throw { status: 400, message: "recipeId is null"};
-    }
-    const recipes = await DButils.execQuery("SELECT id FROM recipes");
-    if (!recipes.find((x) => x.id === recipeId)){
-        if(!validateRecipeIdExistsInApi(recipeId)){
-            throw { status: 404, message: `recipeId ${recipeId} does not exist` };
-        }
-    }
-    return true
-}
-
-async function validateRecipeIdExistsInApi(recipeId)
-{
-    if (recipeId == undefined || recipeId == null){
-        throw { status: 400, message: "recipeId is null"};
-    }
-    try{
-    const recipe = await axios.get(`${api_domain}/${recipeId}/information`, {
-        params: {
-            includeNutrition: false,
-            apiKey: process.env.spooncular_apiKey
-        }
-    });
-    if (!recipe){
-        return false;
-    }
-    } catch (error) {
-        return false;
-    }
-    return true;
-}
-
-const argumentsValidation = (req, res, next) => {
-    return (req != null && req.body != null && res != null && next != null);
-}
-
 async function generateNewId()
 {
     let result = await DButils.execQuery("SELECT MAX(id) as id FROM latestindex");
@@ -222,25 +92,52 @@ async function generateNewId()
     return newId;
 }
 
-async function getRecipeInformationInDBAndInApi(rId)
-{
-    let recipe = await getRecipeFromDB(rId);
-    if (recipe.length == 0)
-    {
-        recipe = await getRecipeInformation(rId);
+async function getRecipeInformationFromApi(recipe_id) {
+    if (!validator.validateRecipeIdIsApiType(recipe_id)){
+        throw {status: 400, message: `recipe_id: ${recipe_id} not according to format`}
     }
-    return recipe;
+    const exists = await validator.validateRecipeIdExistsInApi(recipe_id)
+    if (!exists){
+        throw { status: 404, message: `recipe_id: ${recipe_id} does not exist`};
+    }
+    const recipe_info = await axios.get(`${api_domain}/${recipe_id}/information`, {
+        params: {
+            includeNutrition: false,
+            apiKey: process.env.spooncular_apiKey
+        }
+    });
+    const schemed_recipe = transformRecipeByScheme(recipe_info.data)
+    return schemed_recipe
 }
 
-exports.constSearchValidationOptions = constSearchValidationOptions;
-exports.argumentsValidation = argumentsValidation;
-exports.getRecipeInformation = getRecipeInformation;
-exports.getRecipeFromDB = getRecipeFromDB;
-exports.generateNewId = generateNewId;
-exports.getRecipeDetails = getRecipeDetails;
+async function getRecipeInformationFromDB(recipe_id) {
+    if (!validator.validateIfRecipeIdIsDBType(recipe_id)){
+        throw {status: 400, message: `recipe_id: ${recipe_id} not according to format`}
+    }
+    const exists = await validator.validateRecipeIdExistsInDB(recipe_id)
+    if (!exists){
+        throw { status: 404, message: `recipe_id: ${recipe_id} does not exist`};
+    }
+    const recipe_info = await DButils.execQuery(`SELECT * FROM recipes WHERE id = '${recipe_id}'`);
+    return recipe_info[0]
+}
+
+function transformRecipeByScheme(recipe_info){
+    const { id, title, readyInMinutes, image, aggregateLikes, vegan, vegetarian, glutenFree } = recipe_info;
+    return {
+        id: id,
+        title: title,
+        readyInMinutes: readyInMinutes,
+        image: image,
+        popularity: aggregateLikes,
+        vegan: vegan,
+        vegetarian: vegetarian,
+        glutenFree: glutenFree,
+    }
+} 
+
+exports.getRecipeInformationFromApi = getRecipeInformationFromApi;
+exports.getRecipeInformationFromDB = getRecipeInformationFromDB;
 exports.addNewRecipe = addNewRecipe;
 exports.getRandomRecipes = getRandomRecipes;
 exports.searchByLimit = searchByLimit;
-exports.validateRecipeIdExists = validateRecipeIdExists;
-exports.validateRecipeIdExistsInApi = validateRecipeIdExistsInApi;
-exports.getRecipeInformationInDBAndInApi = getRecipeInformationInDBAndInApi;

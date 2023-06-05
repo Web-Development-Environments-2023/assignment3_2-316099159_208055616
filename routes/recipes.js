@@ -2,7 +2,7 @@ var express = require("express");
 var router = express.Router();
 const recipes_utils = require("./utils/recipes_utils");
 const user_utils = require("./utils/user_utils");
-
+const validator = require("./utils/validator");
 
 /**
  * GET request to get x recipes by user's limit
@@ -11,11 +11,8 @@ const user_utils = require("./utils/user_utils");
  */
 router.get("/search", async (req, res, next) => {
   try {
-    if (!recipes_utils.argumentsValidation(req, res, next)){
+    if (!validator.argumentsValidation(req, res, next)){
       throw { status: 400, message: "Bad request" };
-    }
-    if (req.session.user_id == undefined){
-      throw { status: 401, message: "Unauthorized" };
     }
     const params = {
       query: req.header('text'), //.trim(),
@@ -25,23 +22,14 @@ router.get("/search", async (req, res, next) => {
       intolerances: req.header('intolerances') != undefined ? req.header('intolerances').split(',') : [], 
     };
     console.log("The params are: \n" + params);
-    if (        
-      params.query != undefined && 
-      params.query.length > 0 &&
-      [5, 10, 15].includes(params.limit) &&
-      params.cuisines.every(cuisine => recipes_utils.constSearchValidationOptions.cuisine.includes(cuisine)) &&
-      params.diets.every(diet => recipes_utils.constSearchValidationOptions.diet.includes(diet)) &&
-      params.intolerances.every(intolerance => recipes_utils.constSearchValidationOptions.intolerance.includes(intolerance))){
-      const recipes = await recipes_utils.searchByLimit(params);
-      if (recipes.length == 0){
-        throw { status: 204, message: "No content" };
-      }
-      res.status(200).send(recipes);
+    if (!validator.validateParamsForSearch(params)){
+      throw { status: 400, message: "Bad request" };
     }
-    else
-    {
-      throw { status: 404, message: "Not found" };
+    const recipes = await recipes_utils.searchByLimit(params);
+    if (recipes.length == 0){
+      throw { status: 204, message: "No content" };
     }
+    res.status(200).send(recipes);
   } catch (error) {
     next(error);
   }
@@ -53,23 +41,14 @@ router.get("/search", async (req, res, next) => {
  * @example http://localhost:3000/recipes/random
  */
 router.get("/random", async (req, res, next) => {
-  try{
-    if (!recipes_utils.argumentsValidation(req, res, next))
-    {
-      throw { status: 401, message: "Unauthorized" };
-    }
-    if (req.body == undefined)
-    {
-      throw { status: 401, message: "Unauthorized" };
-    }
-  } catch (error) {
-    next(error);
+  if (!validator.argumentsValidation(req, res, next)){
+    throw { status: 400, message: "Bad request" };
   }
   try {
     const random_recipes = await recipes_utils.getRandomRecipes();
     if (random_recipes.length == 0)
     {
-      throw { status: 401, message: "Problem occured" };
+      throw { status: 500, message: "Problem occured" };
     }
     res.status(200).send(random_recipes);
   } catch (error) {
@@ -84,32 +63,30 @@ router.get("/random", async (req, res, next) => {
  * @example http://localhost:3000/recipes/123/information
  */
 router.get("/:recipeId", async (req, res, next) => {
+  if (!validator.argumentsValidation(req, res, next)){
+    throw { status: 400, message: "Bad request" };
+  }
   try{
-    if (!recipes_utils.argumentsValidation(req, res, next))
+    const recipe_id = parseInt(req.params.recipeId);
+    if (isNaN(recipe_id))
     {
-      throw { status: 400, message: "Bad request" };
-    }
-    try{
-      const id = parseInt(req.params.recipeId);
-      if (isNaN(id))
-      {
-        throw { status: 400, message: "recipeId must be int" };
-      }
-    }
-    catch (error) {
-      next(error);
+      throw { status: 400, message: "recipeId must be int" };
     }
   } catch (error) {
     next(error);
   }
   try {
-    let recipe = await recipes_utils.getRecipeFromDB(req.params.recipeId);
-    if (!recipe || recipe == undefined|| recipe.length == 0 )
-    {
-      recipe = await recipes_utils.getRecipeDetails(req.params.recipeId);
+    let recipe;
+    if (validator.validateIfRecipeIdIsDBType(req.params.recipeId)){
+      recipe = await recipes_utils.getRecipeInformationFromDB(req.params.recipeId)
     }
-    if (!recipe)
-    {
+    else{
+      const recipeId = parseInt(req.params.recipeId)
+      if (validator.validateRecipeIdIsApiType(recipeId)){
+        recipe = await recipes_utils.getRecipeInformationFromApi(recipeId)
+      }
+    }
+    if (!recipe){
       throw { status: 404, message: "Not found" };
     }
     res.status(200).send(recipe);
@@ -125,15 +102,11 @@ router.get("/:recipeId", async (req, res, next) => {
  * @example http://localhost:3000/recipes/
  */
 router.post("/", async (req, res, next) => {
-  if (!recipes_utils.argumentsValidation(req, res, next))
+  if (!validator.argumentsValidation(req, res, next))
   {
     throw { status: 400, message: "Bad request" };
   }
   try {
-    if (req.body == undefined)
-    {
-      throw { status: 400, message: "Bad request"};
-    }
     const recipe = await recipes_utils.addNewRecipe(req);
     res.status(201).send(recipe);
   } catch (error) {
