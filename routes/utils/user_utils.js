@@ -12,7 +12,6 @@ async function getUserRecipesData(user_id){
     }
     const result = await DButils.execQuery(`SELECT recipesData FROM users WHERE username='${user_id}'`);
     recipesData = result[0].recipesData
-    console.log(recipesData)
     return recipesData
 }
 
