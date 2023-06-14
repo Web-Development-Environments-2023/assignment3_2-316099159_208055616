@@ -54,6 +54,7 @@ router.post("/Register", async (req, res, next) => {
 
 router.post("/Login", async (req, res, next) => {
   try {
+    console.log(req.body)
     // check if already logged in
     if (req.body.username === req.session.user_id)
       throw { status: 403, message: `Username "${req.body.username}" already connected` };
@@ -76,6 +77,7 @@ router.post("/Login", async (req, res, next) => {
 
     // Set cookie
     req.session.user_id = user.userName
+    console.log("after setting cookie: " + req.session.user_id)
 
     // return cookie
     res.status(200).send({ message: "login succeeded", success: true });

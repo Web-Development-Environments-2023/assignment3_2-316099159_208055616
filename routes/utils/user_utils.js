@@ -89,7 +89,10 @@ async function addToLastWatched(user_id, recipe_id) {
     if (recipesData.lastWatched.includes(recipe_id)) {
         throw { status: 409, message: `${recipe_id} already in ${user_id}'s lastWatched` };
     }
-    recipesData.lastWatched.push(recipe_id);
+    recipesData.lastWatched.unshift(recipe_id);
+    if (recipesData.lastWatched.length > 3) {
+        recipesData.lastWatched = recipesData.lastWatched.slice(0, 3);
+    }
     await DButils.execQuery(`UPDATE users SET recipesData='${JSON.stringify(recipesData)}' WHERE username='${user_id}'`);
 }
 

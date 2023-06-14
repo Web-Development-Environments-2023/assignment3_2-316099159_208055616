@@ -83,7 +83,7 @@ router.get("/:recipeId", async (req, res, next) => {
     else{
       const recipeId = parseInt(req.params.recipeId)
       if (validator.validateRecipeIdIsApiType(recipeId)){
-        recipe = await recipes_utils.getRecipeInformationFromApi(recipeId)
+        recipe = await recipes_utils.getRecipeInformationFromApi(recipeId, false)
       }
     }
     if (!recipe){

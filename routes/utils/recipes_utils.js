@@ -1,4 +1,5 @@
 const axios = require("axios");
+const e = require("express");
 const DButils = require("./DButils");
 const user_utils = require("./user_utils");
 const validator = require("./validator");
@@ -34,7 +35,7 @@ async function getRandomRecipes(){
         });
         const recipes = [];
         rawRandomRecipes.data.recipes.forEach((recipe_info) => {
-            schemedRecipe = transformRecipeByScheme(recipe_info)
+            schemedRecipe = transformRecipeBySchemePreview(recipe_info)
             recipes.push(schemedRecipe) 
         });
         return recipes;
@@ -66,7 +67,7 @@ async function searchByLimit(params){
     });
     const recipes = [];
     rawRecipes.data.results.forEach((recipe) => {
-        const schemedRecipe = transformRecipeByScheme(recipe)
+        const schemedRecipe = transformRecipeBySchemePreview(recipe)
         recipes.push(schemedRecipe);
     });
     return recipes;
@@ -95,7 +96,7 @@ async function generateNewId()
     return newId;
 }
 
-async function getRecipeInformationFromApi(recipe_id) {
+async function getRecipeInformationFromApi(recipe_id, getPreviewScheme = true) {
     if (!validator.validateRecipeIdIsApiType(recipe_id)){
         throw {status: 400, message: `recipe_id: ${recipe_id} not according to format`}
     }
@@ -109,7 +110,13 @@ async function getRecipeInformationFromApi(recipe_id) {
             apiKey: process.env.spooncular_apiKey
         }
     });
-    const schemed_recipe = transformRecipeByScheme(recipe_info.data)
+    let schemed_recipe;
+    if (getPreviewScheme) {
+        schemed_recipe = transformRecipeBySchemePreview(recipe_info.data)
+    }
+    else {
+        schemed_recipe = transformRecipeBySchemeFull(recipe_info.data)
+    }
     return schemed_recipe
 }
 
@@ -125,7 +132,7 @@ async function getRecipeInformationFromDB(recipe_id) {
     return recipe_info[0]
 }
 
-function transformRecipeByScheme(recipe_info){
+function transformRecipeBySchemePreview(recipe_info){
     const { id, title, readyInMinutes, image, aggregateLikes, vegan, vegetarian, glutenFree } = recipe_info;
     return {
         id: id,
@@ -136,6 +143,24 @@ function transformRecipeByScheme(recipe_info){
         vegan: vegan,
         vegetarian: vegetarian,
         glutenFree: glutenFree,
+    }
+}
+
+function transformRecipeBySchemeFull(recipe_info){
+    const { id, title, readyInMinutes, image, aggregateLikes, vegan, vegetarian, glutenFree ,extendedIngredients, analyzedInstructions, instructions, servings } = recipe_info;
+    return {
+        id: id,
+        title: title,
+        readyInMinutes: readyInMinutes,
+        image: image,
+        popularity: aggregateLikes,
+        vegan: vegan,
+        vegetarian: vegetarian,
+        glutenFree: glutenFree,
+        extendedIngredients: extendedIngredients,
+        analyzedInstructions: analyzedInstructions,
+        instructions: instructions,
+        servings: servings
     }
 } 
 
