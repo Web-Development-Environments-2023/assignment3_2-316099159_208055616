@@ -38,9 +38,6 @@ app.get("/",function(req,res)
 
 });
 
-// app.use(cors());
-// app.options("*", cors());
-
 const corsConfig = {
   origin: true,
   credentials: true
@@ -83,6 +80,7 @@ app.use(auth);
 
 // Default router
 app.use(function (err, req, res, next) {
+  res.setHeader('Access-Control-Allow-Origin', 'http://localhost:8080');
   res.status(err.status || 500).send({ message: err.message, success: false });
 });
 
