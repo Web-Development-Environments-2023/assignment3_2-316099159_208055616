@@ -15,7 +15,6 @@ router.post("/Register", async (req, res, next) => {
       country: req.body.country,
       password: req.body.password,
       email: req.body.email,
-      profilePic: req.body.profilePic
     }
 
     let users = [];
@@ -75,7 +74,7 @@ router.post("/Login", async (req, res, next) => {
     }
 
     // Set cookie
-    req.session.user_id = user.userName
+    req.session.user_id = user.userName;
 
     // return cookie
     res.status(200).send({ message: "login succeeded", success: true });
@@ -84,11 +83,15 @@ router.post("/Login", async (req, res, next) => {
   }
 });
 
-router.post("/Logout", function (req, res) {
-  if (req.session.user_id === undefined)
-    throw { status: 403, message: "cannot logout with no connected session" };
-  req.session.reset(); // reset the session info --> send cookie when  req.session == undefined!!
-  res.send({ success: true, message: "logout succeeded" });
+router.post("/Logout", async (req, res, next) => {
+  try {
+    if (req.session.user_id === undefined)
+      throw { status: 403, message: "cannot logout with no connected session" };
+    req.session.reset(); // reset the session info --> send cookie when  req.session == undefined!!
+    res.send({ success: true, message: "logout succeeded" });
+  } catch (error) {
+    next(error);
+  }
 });
 
 module.exports = router;
